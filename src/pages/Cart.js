@@ -70,15 +70,40 @@ const CartPage = () => {
         return <p>Error: {error}</p>;
     }
 
-    const handleIncreaseQuantity = (productId) => {
+    const handleIncreaseQuantity = async (productId) => {
+        const token = localStorage.getItem("token");
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+        const userId = savedUser.id;
+
         setCartItems((prevItems) =>
             prevItems.map((item) =>
                 item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
             )
         );
+
+        try {
+            const updatedItem = cartItems.find(item => item.productId === productId);
+            const response = await apiService.put(`/api/carts/${cartId}/items?userId=${userId}`, {
+                product_id: updatedItem.productId,
+                quantity: updatedItem.quantity + 1
+            }, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (response.status !== 200) {
+                console.error('Failed to update item quantity:', response);
+            }
+        } catch (error) {
+            console.error('Failed to update item quantity:', error);
+        }
     };
 
-    const handleDecreaseQuantity = (productId) => {
+    const handleDecreaseQuantity = async (productId) => {
+        const token = localStorage.getItem("token");
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+        const userId = savedUser.id;
         setCartItems((prevItems) =>
             prevItems.map((item) =>
                 item.productId === productId && item.quantity > 1
@@ -86,35 +111,60 @@ const CartPage = () => {
                     : item
             )
         );
-    };
-    const handleProceedCheckout = () => {
-        navigate("/checkout")
-    }
-    const handleQuantityChange = async (productId, event) => {
-        const savedUser = JSON.parse(localStorage.getItem('user'));
-        const userId = savedUser.id;
-        const value = event.target.value;
-        if (value === '' || (parseInt(value) > 0 && parseInt(value) <= 99)) {
-            setCartItems((prevItems) =>
-                prevItems.map((item) =>
-                    item.productId === productId ? { ...item, quantity: value === '' ? '' : parseInt(value) } : item
-                )
-            );
-        }
-        const token = localStorage.getItem("token");
-        const quantity = value;
-        const data = {
-            productId,
-            quantity
-        }
+
         try {
-            await apiService.put(`/api/carts/${cartId}/items?userId=${userId}`, data, {
+            const updatedItem = cartItems.find(item => item.productId === productId);
+            const response = await apiService.put(`/api/carts/${cartId}/items?userId=${userId}`, {
+                product_id: updatedItem.productId,
+                quantity: updatedItem.quantity - 1
+            }, {
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
-            })
-        } catch {
+            });
 
+            if (response.status !== 200) {
+                console.error('Failed to update item quantity:', response);
+            }
+        } catch (error) {
+            console.error('Failed to update item quantity:', error);
+        }
+    };
+
+    const handleProceedCheckout = () => {
+        navigate("/checkout")
+    };
+
+    const handleQuantityChange = async (productId, event) => {
+        const newQuantity = event.target.value;
+        if (newQuantity === '' || (parseInt(newQuantity) > 0 && parseInt(newQuantity) <= 99)) {
+            setCartItems((prevItems) =>
+                prevItems.map((item) =>
+                    item.productId === productId ? { ...item, quantity: newQuantity === '' ? '' : parseInt(newQuantity) } : item
+                )
+            );
+
+            if (newQuantity !== '') {
+                const savedUser = JSON.parse(localStorage.getItem('user'));
+                const userId = savedUser.id;
+                const token = localStorage.getItem("token");
+                try {
+                    const response = await apiService.put(`/api/carts/${cartId}/items?userId=${userId}`, {
+                        product_id: productId,
+                        quantity: parseInt(newQuantity)
+                    }, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+
+                    if (response.status !== 200) {
+                        console.error('Failed to update item quantity:', response);
+                    }
+                } catch (error) {
+                    console.error('Failed to update item quantity:', error);
+                }
+            }
         }
     };
 
@@ -149,7 +199,6 @@ const CartPage = () => {
             console.error('Failed to remove item from cart:', error);
         }
     };
-
 
     const getTotalPrice = () => {
         return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);

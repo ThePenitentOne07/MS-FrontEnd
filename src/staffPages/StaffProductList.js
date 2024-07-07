@@ -1,12 +1,8 @@
-// ProductList.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Container,
   CssBaseline,
-  Grid,
   Paper,
   Table,
   TableBody,
@@ -14,132 +10,330 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Toolbar,
   Typography,
-} from '@mui/material';
-import { Sheet } from '@mui/joy';
-
-const products = [
-  { id: 1, name: "Product #1", image: "path/to/image1.jpg", description: "Description for product #1", quantity: 10, price: 100 },
-  { id: 2, name: "Product #2", image: "path/to/image2.jpg", description: "Description for product #2", quantity: 20, price: 100 },
-  { id: 3, name: "Product #3", image: "path/to/image3.jpg", description: "Description for product #3", quantity: 30, price: 100 },
-  { id: 4, name: "Product #4", image: "path/to/image4.jpg", description: "Description for product #4", quantity: 40, price: 100 },
-  { id: 5, name: "Product #5", image: "path/to/image5.jpg", description: "Description for product #5", quantity: 50, price: 100 },
-  { id: 6, name: "Product #6", image: "path/to/image6.jpg", description: "Description for product #6", quantity: 60, price: 100 },
-  { id: 1, name: "Product #1", image: "path/to/image1.jpg", description: "Description for product #1", quantity: 10, price: 100 },
-  { id: 2, name: "Product #2", image: "path/to/image2.jpg", description: "Description for product #2", quantity: 20, price: 100 },
-  { id: 3, name: "Product #3", image: "path/to/image3.jpg", description: "Description for product #3", quantity: 30, price: 100 },
-  { id: 4, name: "Product #4", image: "path/to/image4.jpg", description: "Description for product #4", quantity: 40, price: 100 },
-  { id: 5, name: "Product #5", image: "path/to/image5.jpg", description: "Description for product #5", quantity: 50, price: 100 },
-  { id: 6, name: "Product #6", image: "path/to/image6.jpg", description: "Description for product #6", quantity: 60, price: 100 },
-  { id: 1, name: "Product #1", image: "path/to/image1.jpg", description: "Description for product #1", quantity: 10, price: 100 },
-  { id: 2, name: "Product #2", image: "path/to/image2.jpg", description: "Description for product #2", quantity: 20, price: 100 },
-  { id: 3, name: "Product #3", image: "path/to/image3.jpg", description: "Description for product #3", quantity: 30, price: 100 },
-  { id: 4, name: "Product #4", image: "path/to/image4.jpg", description: "Description for product #4", quantity: 40, price: 100 },
-  { id: 5, name: "Product #5", image: "path/to/image5.jpg", description: "Description for product #5", quantity: 50, price: 100 },
-  { id: 6, name: "Product #6", image: "path/to/image6.jpg", description: "Description for product #6", quantity: 60, price: 100 },
-  { id: 1, name: "Product #1", image: "path/to/image1.jpg", description: "Description for product #1", quantity: 10, price: 100 },
-  { id: 2, name: "Product #2", image: "path/to/image2.jpg", description: "Description for product #2", quantity: 20, price: 100 },
-  { id: 3, name: "Product #3", image: "path/to/image3.jpg", description: "Description for product #3", quantity: 30, price: 100 },
-  { id: 4, name: "Product #4", image: "path/to/image4.jpg", description: "Description for product #4", quantity: 40, price: 100 },
-  { id: 5, name: "Product #5", image: "path/to/image5.jpg", description: "Description for product #5", quantity: 50, price: 100 },
-  { id: 6, name: "Product #6", image: "path/to/image6.jpg", description: "Description for product #6", quantity: 60, price: 100 },
-];
+  Dialog,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import apiService from "../app/apiService";
+import ProductDetails from "./ProductDetails";
+import ProductForm from "./ProductForm";
 
 export default function ProductList() {
-  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedForm, setSelectedForm] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+  const [filters, setFilters] = useState({
+    quantity: { min: "", max: "" },
+    price: { min: "", max: "" },
+    categoryID: "",
+  });
 
-  const handleUpdateClick = (product) => {
-    navigate(`edit/${product.id}`);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const getCategoryName = (categoryId) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.categoryName : "Unknown";
   };
 
-  const handleAddClick = () => {
-    navigate('new');
+  const fetchData = async () => {
+    try {
+      const productsResponse = await apiService.get("/api/products", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      const categoriesResponse = await apiService.get(
+        "/api/products/list-category",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      setProducts(productsResponse.data.result);
+      setCategories(categoriesResponse.data.result);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const sortedAndFilteredProducts = React.useMemo(() => {
+    return products
+      .filter((product) => {
+        return (
+          product.productName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) &&
+          (!filters.quantity.min ||
+            product.quantity >= parseInt(filters.quantity.min)) &&
+          (!filters.quantity.max ||
+            product.quantity <= parseInt(filters.quantity.max)) &&
+          (!filters.price.min ||
+            product.price >= parseFloat(filters.price.min)) &&
+          (!filters.price.max ||
+            product.price <= parseFloat(filters.price.max)) &&
+          (!filters.categoryID || product.categoryID === filters.categoryID)
+        );
+      })
+      .sort((a, b) => {
+        if (sortConfig.key === null) return 0;
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+  }, [products, searchTerm, sortConfig, filters]);
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const handleRowClick = (product) => {
+    setSelectedProduct(product);
+    setSelectedForm("productDetails");
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
+      setOpen(false);
+      setSelectedProduct(null);
+      setSelectedForm(null); // Reset selected form on close
+      fetchData();
+    }
+  };
+
+  const handleDeleteSuccess = () => {
+    setOpen(false);
+    setSelectedProduct(null);
+    fetchData();
+  };
+
+  const handleAddProductClick = () => {
+    setOpen(true);
+    setSelectedForm("productForm");
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Box
-
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Typography component="h1" variant="h4" color="inherit" noWrap sx={{ flexGrow: 1, mb: 4 }}>
+      <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: 2,
+            mb: 4,
+          }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            color="inherit"
+            noWrap
+            sx={{ mb: 4 }}
+          >
             Danh Sách Sản Phẩm
           </Typography>
-          <Button variant="contained" color="primary" sx={{ mb: 4 }} onClick={handleAddClick}>
-            Thêm Sản Phẩm
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddProductClick}
+          >
+            Thêm sản phẩm
           </Button>
-          <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-            <Table sx={{ minWidth: 1100 }} stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tên Sản Phẩm</TableCell>
-                  <TableCell align="right">Số Lượng</TableCell>
-                  <TableCell align="right">Giá</TableCell>
-                  <TableCell align="right">Mô Tả</TableCell>
-                  <TableCell align="right">Hành Động</TableCell>
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
+          <Typography variant="h5" sx={{ marginBottom: 1 }}>
+            Tìm kiếm sản phẩm
+          </Typography>
+          <TextField
+            sx={{ flex: 2 }}
+            label="Nhập từ khóa"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+          <TextField
+            label="Số lượng (thấp nhất)"
+            type="number"
+            value={filters.quantity.min}
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                quantity: { ...filters.quantity, min: e.target.value },
+              })
+            }
+          />
+          <TextField
+            label="Số lượng (cao nhất)"
+            type="number"
+            value={filters.quantity.max}
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                quantity: { ...filters.quantity, max: e.target.value },
+              })
+            }
+          />
+          <TextField
+            label="Giá (thấp nhất)"
+            type="number"
+            value={filters.price.min}
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                price: { ...filters.price, min: e.target.value },
+              })
+            }
+          />
+          <TextField
+            label="Giá (cao nhất)"
+            type="number"
+            value={filters.price.max}
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                price: { ...filters.price, max: e.target.value },
+              })
+            }
+          />
+
+          <Select
+            sx={{ flex: 1 }}
+            label="Category"
+            value={filters.categoryID}
+            onChange={(e) =>
+              setFilters({ ...filters, categoryID: e.target.value })
+            }
+            displayEmpty
+            fullWidth
+          >
+            <MenuItem value="">
+              <em>Danh mục sản phẩm</em>
+            </MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.categoryName}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+        <TableContainer component={Paper} sx={{ maxHeight: 475 }}>
+          <Table sx={{ minWidth: 1100 }} stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  align="left"
+                  onClick={() => requestSort("productID")}
+                  sx={{ cursor: "pointer", fontWeight: "bold" }}
+                >
+                  ID{" "}
+                  {sortConfig.key === "productID" &&
+                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  onClick={() => requestSort("productName")}
+                  sx={{ cursor: "pointer", fontWeight: "bold" }}
+                >
+                  Tên Sản Phẩm{" "}
+                  {sortConfig.key === "productName" &&
+                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  onClick={() => requestSort("quantity")}
+                  sx={{ cursor: "pointer", fontWeight: "bold" }}
+                >
+                  Số Lượng{" "}
+                  {sortConfig.key === "quantity" &&
+                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  onClick={() => requestSort("price")}
+                  sx={{ cursor: "pointer", fontWeight: "bold" }}
+                >
+                  Giá{" "}
+                  {sortConfig.key === "price" &&
+                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  onClick={() => requestSort("categoryID")}
+                  sx={{ cursor: "pointer", fontWeight: "bold" }}
+                >
+                  Loại sản phẩm{" "}
+                  {sortConfig.key === "categoryID" &&
+                    (sortConfig.direction === "ascending" ? "↑" : "↓")}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedAndFilteredProducts.map((product) => (
+                <TableRow
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { backgroundColor: "#f5f5f5" },
+                  }}
+                  key={product.productID}
+                  onClick={() => handleRowClick(product)}
+                >
+                  <TableCell align="left">{product.productID}</TableCell>
+                  <TableCell align="left">{product.productName}</TableCell>
+                  <TableCell align="left">{product.quantity}</TableCell>
+                  <TableCell align="left">{product.price}</TableCell>
+                  <TableCell align="left">
+                    {getCategoryName(product.categoryID)}
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">{product.name}</TableCell>
-                    <TableCell align="right">{product.quantity}</TableCell>
-                    <TableCell align="right">{product.price}</TableCell>
-                    <TableCell align="right">{product.description}</TableCell>
-                    <TableCell align="right">
-
-                      <Button size="small">Xóa</Button>
-                      <Button size="small" onClick={() => handleUpdateClick(product)}>Cập Nhật</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          {/* <Sheet sx={{ height: 300, overflow: 'auto' }}>
-            <Table
-              aria-label="table with sticky header"
-              stickyHeader
-              stickyFooter
-              stripe="odd" z
-              hoverRow>
-              <thead>
-                <tr>
-                  <th>Tên sản phẩm</th>
-                  <th>ID sản phẩm</th>
-                  <th>Số lượng</th>
-                  <th>Giá</th>
-                  <th>Mô tả</th>
-                  <th>Hành Động</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td>{product.name}</td>
-                    <td>{product.id}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.price}</td>
-                    <td>{product.description}</td>
-
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Sheet> */}
-        </Container>
-      </Box>
+              ))}
+              {sortedAndFilteredProducts.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No products found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        {selectedForm === "productDetails" && (
+          <ProductDetails
+            product={selectedProduct}
+            onClose={handleClose}
+            onDeleteSuccess={handleDeleteSuccess}
+            categories={categories}
+          />
+        )}
+        {selectedForm === "productForm" && (
+          <ProductForm onClose={handleClose} categories={categories} />
+        )}
+      </Dialog>
     </Box>
   );
 }

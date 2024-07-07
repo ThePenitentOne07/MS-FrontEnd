@@ -36,6 +36,8 @@ import AddStaff from '../adminPages/AddStaff';
 import { FormContext2 } from '../components/form/FormContext';
 import PrivateRoute from '../contexts/PrivateRoute';
 import TrasactionStatus from '../pages/TrasactionStatus';
+// import CreatePost from '../staffPages/EditorComponent';
+import EditorComponent from '../staffPages/EditorComponent';
 function Router() {
   return (
     <AuthProvider>
@@ -90,6 +92,7 @@ function Router() {
             <Route path='customer' element={<CustomerManagement />} />
             <Route path='post' element={<PostStaff />} />
             <Route path='order' element={<OrderListStaff />} />
+            <Route path='newPost' element={<EditorComponent />} />
           </Route>
         </Routes>
       </FormContext2>

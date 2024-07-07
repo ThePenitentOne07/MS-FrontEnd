@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-basic-styles": "^42.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^42.0.0",
+    "@ckeditor/ckeditor5-editor-classic": "^42.0.0",
+    "@ckeditor/ckeditor5-essentials": "^42.0.0",
+    "@ckeditor/ckeditor5-link": "^42.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^42.0.0",
+    "@ckeditor/ckeditor5-react": "^8.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.4.2",
