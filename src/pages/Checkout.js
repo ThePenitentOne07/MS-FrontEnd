@@ -117,7 +117,7 @@ export default function Checkout() {
       const savedUser = JSON.parse(localStorage.getItem('user'));
       const userId = savedUser.id;
       const token = localStorage.getItem("token");
-      const amount = Math.round(parseFloat(totalPrice)); // Convert to long integer
+      const amount = totalPrice; // Convert to long integer
 
       try {
         const responsePayment = await apiService.post(
@@ -145,7 +145,7 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  // console.log(totalPrice)
+  console.log(totalPrice)
   return (
     <ThemeProvider theme={showCustomTheme ? checkoutTheme : defaultTheme}>
 

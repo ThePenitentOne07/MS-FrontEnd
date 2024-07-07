@@ -27,10 +27,10 @@ const statusMapping = {
 };
 
 const statusColorMapping = {
-  PAID: '#FFD700', // Yellow
+  PAID: '#32CD32', // Yellow
   IN_DELIVERY: '#1E90FF', // Blue
   CANNOT_DELIVER: '#FF4500', // Red
-  COMPLETE_EXCHANGE: '#32CD32', // Green
+
 };
 
 const OrderListStaff = () => {
@@ -147,7 +147,7 @@ const OrderListStaff = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      setOrders(res.data.result.filter(order => order.orderStatus !== ('IN_CART' && 'COMPLETE_EXCHANGE')));
+      setOrders(res.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE'));
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -155,7 +155,6 @@ const OrderListStaff = () => {
   useEffect(() => {
     getOrders();
   }, []);
-
 
   const handleFilterChange = (event) => {
     setFilterStatus(event.target.value);

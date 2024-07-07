@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react'
-import { Stack, Typography, Button } from '@mui/material'
+import React, { useEffect } from 'react';
+import { Stack, Typography, Button } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import apiService from '../app/apiService';
 
-function TrasactionStatus() {
+function TransactionStatus() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
 
-    // Get the vnp_ResponseCode from the query parameters
     const amount = params.get('vnp_Amount');
     const bankCode = params.get('vnp_BankCode');
     const bankTranNo = params.get('vnp_BankTranNo');
@@ -18,7 +17,7 @@ function TrasactionStatus() {
     const transactionStatus = params.get('vnp_TransactionStatus');
     const txnRef = params.get('vnp_TxnRef');
     const responseCode = params.get('vnp_ResponseCode');
-    // console.log(responseCode);
+
     const data = {
         amount,
         bankCode,
@@ -29,32 +28,44 @@ function TrasactionStatus() {
         transactionNo,
         transactionStatus,
         txnRef,
-        responseCode
-    }
+        responseCode,
+    };
+
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         const sendReq = async () => {
             try {
                 await apiService.post('/api/payment/vnpay-callback', data, {
                     headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                })
-            } catch {
-                console.log("bleh")
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+            } catch (error) {
+                console.log('Error sending request:', error);
             }
         };
-        sendReq()
-    })
+        sendReq();
+    }, [data]);
+
+    const isSuccess = responseCode === '00';
+
     return (
         <>
             <Stack spacing={2} useFlexGap>
                 <Typography variant="h1">📦</Typography>
-                <Typography variant="h5">Thank you for your order!</Typography>
+                <Typography variant="h5">
+                    {isSuccess ? 'Giao dịch thành công' : 'Giao dịch thất bại'}
+                </Typography>
                 <Typography variant="body1" color="text.secondary">
-                    Your order number is
-                    <strong>&nbsp;#140396</strong>. We have emailed your order
-                    confirmation and will update you once its shipped.
+                    {isSuccess ? (
+                        <>
+                            Your order number is
+                            <strong>&nbsp;#140396</strong>. We have emailed your order
+                            confirmation and will update you once it&apos;s shipped.
+                        </>
+                    ) : (
+                        'Your transaction could not be completed. Please try again or contact support.'
+                    )}
                 </Typography>
                 <Button
                     variant="contained"
@@ -67,7 +78,7 @@ function TrasactionStatus() {
                 </Button>
             </Stack>
         </>
-    )
+    );
 }
 
-export default TrasactionStatus
+export default TransactionStatus;
