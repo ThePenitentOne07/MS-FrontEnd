@@ -1,0 +1,354 @@
+{
+    "products": [
+      {
+        "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+        "cover": "https://i5.walmartimages.com/seo/Similac-Advance-Powder-Baby-Formula-with-Iron-DHA-Lutein-30-8-oz-Value-Can-Pack-of-6_3c13c855-1316-489a-8ba1-974cb3d872e2.f2f86fb9680f97519f892e4bc33d5cbe.jpeg",
+        "images": [
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRysB1XXHpSo_JCfp6lQygryljYR7T54SHGwQ&s",
+          "https://www.uyyaala.com/cdn/shop/products/IMG_9318.jpg?v=1660654060",
+          "https://i5.walmartimages.com/seo/Similac-Advance-Powder-Baby-Formula-with-Iron-DHA-Lutein-30-8-oz-Value-Can-Pack-of-6_3c13c855-1316-489a-8ba1-974cb3d872e2.f2f86fb9680f97519f892e4bc33d5cbe.jpeg"
+        ],
+        "name": "Infant Premium Formula Milk",
+        "code": "98BDE570",
+        "sku": "BB75K5210YW/SV",
+        "tags": [
+          "Nutrition",
+          "Infant",
+          "Health",
+          
+          "Dairy"
+        ],
+        "price": 25.99,
+        "priceSale": 22.99,
+        "totalRating": 4.5,
+        "totalReview": 5300,
+        "ratings": [
+          {
+            "name": "1 Star",
+            "starCount": 150,
+            "reviewCount": 300
+          },
+          {
+            "name": "2 Star",
+            "starCount": 200,
+            "reviewCount": 400
+          },
+          {
+            "name": "3 Star",
+            "starCount": 500,
+            "reviewCount": 1000
+          },
+          {
+            "name": "4 Star",
+            "starCount": 1500,
+            "reviewCount": 3000
+          },
+          {
+            "name": "5 Star",
+            "starCount": 2000,
+            "reviewCount": 4600
+          }
+        ],
+        "reviews": [
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+            "name": "Emma Clark",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_1.jpg",
+            "comment": "Great product, my baby loves it!",
+            "rating": 5,
+            "isPurchased": true,
+            "helpful": 1500,
+            "postedAt": "2023-01-15T08:00:00.000Z"
+          },
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2c",
+            "name": "Oliver Smith",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_2.jpg",
+            "comment": "Noticed improvement in my baby's digestion.",
+            "rating": 4,
+            "isPurchased": true,
+            "helpful": 1200,
+            "postedAt": "2023-01-14T08:00:00.000Z"
+          }
+        ],
+        "status": "in_stock",
+        "inventoryType": "available",
+        "sizes": [
+          "400g",
+          "800g",
+          "1200g"
+        ],
+        "available": 200,
+        "description": "\n<p><strong><small> SPECIFICATION</small></strong></p>\n<p>Formulated for infants 0-12 months. Easy to digest. Supports growth and development.\n<br /><br />\n<p><strong><small> INGREDIENTS</small></strong></p>\n<p>Nonfat milk, lactose, vegetable oils, whey protein, vitamins and minerals.</p>\n",
+        "sold": 1230,
+        "createdAt": "2023-01-15T08:00:00.000Z",
+        "category": "Baby Nutrition",
+        "gender": "Unisex",
+        "colors": [
+          "#FFFFFF"
+        ]
+      },
+      {
+        "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+        "cover": "https://www.uyyaala.com/cdn/shop/products/IMG_9318.jpg?v=1660654060",
+        "images": [
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_1.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_2.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_3.jpg"
+        ],
+        "name": "Infant Premium Formula Milk",
+        "code": "98BDE570",
+        "sku": "BB75K5210YW/SV",
+        "tags": [
+          "Nutrition",
+          "Infant",
+          "Health",
+          "Dairy"
+        ],
+        "price": 25.99,
+        "priceSale": 22.99,
+        "totalRating": 4.5,
+        "totalReview": 5300,
+        "ratings": [
+          {
+            "name": "1 Star",
+            "starCount": 150,
+            "reviewCount": 300
+          },
+          {
+            "name": "2 Star",
+            "starCount": 200,
+            "reviewCount": 400
+          },
+          {
+            "name": "3 Star",
+            "starCount": 500,
+            "reviewCount": 1000
+          },
+          {
+            "name": "4 Star",
+            "starCount": 1500,
+            "reviewCount": 3000
+          },
+          {
+            "name": "5 Star",
+            "starCount": 2000,
+            "reviewCount": 4600
+          }
+        ],
+        "reviews": [
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+            "name": "Emma Clark",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_1.jpg",
+            "comment": "Great product, my baby loves it!",
+            "rating": 5,
+            "isPurchased": true,
+            "helpful": 1500,
+            "postedAt": "2023-01-15T08:00:00.000Z"
+          },
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2c",
+            "name": "Oliver Smith",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_2.jpg",
+            "comment": "Noticed improvement in my baby's digestion.",
+            "rating": 4,
+            "isPurchased": true,
+            "helpful": 1200,
+            "postedAt": "2023-01-14T08:00:00.000Z"
+          }
+        ],
+        "status": "in_stock",
+        "inventoryType": "available",
+        "sizes": [
+          "400g",
+          "800g",
+          "1200g"
+        ],
+        "available": 200,
+        "description": "\n<p><strong><small> SPECIFICATION</small></strong></p>\n<p>Formulated for infants 0-12 months. Easy to digest. Supports growth and development.\n<br /><br />\n<p><strong><small> INGREDIENTS</small></strong></p>\n<p>Nonfat milk, lactose, vegetable oils, whey protein, vitamins and minerals.</p>\n",
+        "sold": 1230,
+        "createdAt": "2023-01-15T08:00:00.000Z",
+        "category": "Baby Nutrition",
+        "gender": "Unisex",
+        "colors": [
+          "#FFFFFF"
+        ]
+      },
+      {
+        "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+        "cover": "https://www.alphamega.com.cy/Admin/Public/GetImage.ashx?Width=800&Height=800&Crop=5&DoNotUpscale=True&FillCanvas=True&Image=/Files/Images/Ecom/Products/784233.jpg&AlternativeImage=/Images/missing_image.jpg",
+        "images": [
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_1.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_2.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_3.jpg"
+        ],
+        "name": "Infant Premium Formula Milk",
+        "code": "98BDE570",
+        "sku": "BB75K5210YW/SV",
+        "tags": [
+          "Nutrition",
+          "Infant",
+          "Health",
+          "Dairy"
+        ],
+        "price": 25.99,
+        "priceSale": 22.99,
+        "totalRating": 4.5,
+        "totalReview": 5300,
+        "ratings": [
+          {
+            "name": "1 Star",
+            "starCount": 150,
+            "reviewCount": 300
+          },
+          {
+            "name": "2 Star",
+            "starCount": 200,
+            "reviewCount": 400
+          },
+          {
+            "name": "3 Star",
+            "starCount": 500,
+            "reviewCount": 1000
+          },
+          {
+            "name": "4 Star",
+            "starCount": 1500,
+            "reviewCount": 3000
+          },
+          {
+            "name": "5 Star",
+            "starCount": 2000,
+            "reviewCount": 4600
+          }
+        ],
+        "reviews": [
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+            "name": "Emma Clark",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_1.jpg",
+            "comment": "Great product, my baby loves it!",
+            "rating": 5,
+            "isPurchased": true,
+            "helpful": 1500,
+            "postedAt": "2023-01-15T08:00:00.000Z"
+          },
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2c",
+            "name": "Oliver Smith",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_2.jpg",
+            "comment": "Noticed improvement in my baby's digestion.",
+            "rating": 4,
+            "isPurchased": true,
+            "helpful": 1200,
+            "postedAt": "2023-01-14T08:00:00.000Z"
+          }
+        ],
+        "status": "in_stock",
+        "inventoryType": "available",
+        "sizes": [
+          "400g",
+          "800g",
+          "1200g"
+        ],
+        "available": 200,
+        "description": "\n<p><strong><small> SPECIFICATION</small></strong></p>\n<p>Formulated for infants 0-12 months. Easy to digest. Supports growth and development.\n<br /><br />\n<p><strong><small> INGREDIENTS</small></strong></p>\n<p>Nonfat milk, lactose, vegetable oils, whey protein, vitamins and minerals.</p>\n",
+        "sold": 1230,
+        "createdAt": "2023-01-15T08:00:00.000Z",
+        "category": "Baby Nutrition",
+        "gender": "Unisex",
+        "colors": [
+          "#FFFFFF"
+        ]
+      },
+      {
+        "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+        "cover": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRysB1XXHpSo_JCfp6lQygryljYR7T54SHGwQ&s",
+        "images": [
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_1.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_2.jpg",
+          "https://storage.googleapis.com/cs-demo-data/babystore/product_3.jpg"
+        ],
+        "name": "Infant Premium Formula Milk",
+        "code": "98BDE570",
+        "sku": "BB75K5210YW/SV",
+        "tags": [
+          "Nutrition",
+          "Infant",
+          "Health",
+          "Dairy"
+        ],
+        "price": 25.99,
+        "priceSale": 22.99,
+        "totalRating": 4.5,
+        "totalReview": 5300,
+        "ratings": [
+          {
+            "name": "1 Star",
+            "starCount": 150,
+            "reviewCount": 300
+          },
+          {
+            "name": "2 Star",
+            "starCount": 200,
+            "reviewCount": 400
+          },
+          {
+            "name": "3 Star",
+            "starCount": 500,
+            "reviewCount": 1000
+          },
+          {
+            "name": "4 Star",
+            "starCount": 1500,
+            "reviewCount": 3000
+          },
+          {
+            "name": "5 Star",
+            "starCount": 2000,
+            "reviewCount": 4600
+          }
+        ],
+        "reviews": [
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2b",
+            "name": "Emma Clark",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_1.jpg",
+            "comment": "Great product, my baby loves it!",
+            "rating": 5,
+            "isPurchased": true,
+            "helpful": 1500,
+            "postedAt": "2023-01-15T08:00:00.000Z"
+          },
+          {
+            "id": "b12f09c3-aa89-45d3-c1d8-2ea80b3e9a2c",
+            "name": "Oliver Smith",
+            "avatarUrl": "https://storage.googleapis.com/cs-demo-data/babystore/avatar_2.jpg",
+            "comment": "Noticed improvement in my baby's digestion.",
+            "rating": 4,
+            "isPurchased": true,
+            "helpful": 1200,
+            "postedAt": "2023-01-14T08:00:00.000Z"
+          }
+        ],
+        "status": "in_stock",
+        "inventoryType": "available",
+        "sizes": [
+          "400g",
+          "800g",
+          "1200g"
+        ],
+        "available": 200,
+        "description": "\n<p><strong><small> SPECIFICATION</small></strong></p>\n<p>Formulated for infants 0-12 months. Easy to digest. Supports growth and development.\n<br /><br />\n<p><strong><small> INGREDIENTS</small></strong></p>\n<p>Nonfat milk, lactose, vegetable oils, whey protein, vitamins and minerals.</p>\n",
+        "sold": 1230,
+        "createdAt": "2023-01-15T08:00:00.000Z",
+        "category": "Baby Nutrition",
+        "gender": "Unisex",
+        "colors": [
+          "#FFFFFF"
+        ]
+      }
+    ]
+  }
+  
