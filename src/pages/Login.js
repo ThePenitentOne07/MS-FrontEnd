@@ -45,7 +45,7 @@ function Login() {
             const user = await auth.login({ username, password });
 
             if (user.role === "ADMIN") {
-                navigate("/admin", { replace: true });
+                navigate("/admin/dashboard", { replace: true });
             } else {
                 navigate(from, { replace: true });
             }

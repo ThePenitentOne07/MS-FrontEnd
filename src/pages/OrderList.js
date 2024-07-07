@@ -1,78 +1,70 @@
-    // src/pages/OrderList.js
-    import React, { useState, useEffect } from 'react';
-    import { Box, Typography, Container, Alert , Tabs, Tab} from '@mui/material';
-    import apiService from '../app/apiService';
-    import OrderCard from '../components/OrderCard';
-    import UserInfoCard from '../components/UserInfoCard';
-    
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Container, Tabs, Tab } from '@mui/material';
+import apiService from '../app/apiService';
+import OrderCard from '../components/OrderCard';
+import UserInfoCard from '../components/UserInfoCard';
 
-    const OrderList = () => {
-        // const [orders, setOrders] = useState([]);
-        const [loading, setLoading] = useState(false);
-        const [error, setError] = useState(null);
-        const [selectedTab, setSelectedTab] = useState(0);
-    
+const OrderList = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [selectedTab, setSelectedTab] = useState(0);
+    const [orders, setOrders] = useState([]);
 
-        // useEffect(() => {
-        //     const fetchOrders = async () => {
-        //         setLoading(true);
-        //         try {
-        //             const response = await apiService.get('/orders/delivering');
-        //             setOrders(response.data);
-        //             setError(null);
-        //         } catch (err) {
-        //             setError('Failed to fetch orders');
-        //         } finally {
-        //             setLoading(false);
-        //         }
-        //     };
-
-        //     fetchOrders();
-        // }, []);
-
-        const orders = [
-            {
-                "id": 1,
-                "customerName": "Order 1",
-                "total": 100.50,
-                "status": "Đang giao",
-                "address": "123 Main St, Anytown, USA"
-            },
-            {
-                "id": 2,
-                "customerName": "Order 2",
-                "total": 75.00,
-                "status": "Đang giao",
-                "address": "456 Elm St, Anytown, USA"
-            },
-            {
-                "id": 3,
-                "customerName": "Order 3",
-                "total": 75.00,
-                "status": "Đang xác nhận",
-                "address": "456 Elm St, Anytown, USA"
-            },
-        ]
-        const handleTabChange = (event, newValue) => {
-            setSelectedTab(newValue);
+    useEffect(() => {
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+        const userId = savedUser.id;
+        const token = localStorage.getItem("token");
+        const fetchOrders = async () => {
+            setLoading(true);
+            try {
+                const response = await apiService.get(`/api/orders/user/${userId}`, {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+                setOrders(response.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE'));
+                setError(null);
+            } catch (err) {
+                setError('Failed to fetch orders');
+            } finally {
+                setLoading(false);
+            }
         };
-    
-        const filterOrders = (status) => {
-            if (status === 'Tất cả') return orders;
-            return orders.filter(order => order.status === status);
-        };
-        const tabLabels = ['Tất cả', 'Đang xác nhận', 'Đang giao', 'Đã giao'];
 
+        fetchOrders();
+    }, [selectedTab]);
 
-        return (
-            <Container>
-                <Box sx={{ display: 'flex', mt: 5 }}>
+    const handleTabChange = (event, newValue) => {
+        setSelectedTab(newValue);
+
+    };
+
+    const statusMapping = {
+        'Đang xác nhận': 'PAID',
+        'Đang giao': 'IN_DELIVERY',
+        'Tạm hoãn': 'CANNOT_DELIVER',
+
+    };
+
+    const tabLabels = ['Tất cả', 'Đang xác nhận', 'Tạm hoãn', 'Đang giao'];
+
+    const filterOrders = (statusLabel) => {
+        if (statusLabel === 'Tất cả') {
+            return orders;
+        } else {
+            return orders.filter(order => order.orderStatus === statusMapping[statusLabel]);
+        }
+    };
+
+    return (
+        <Container>
+            <Box sx={{ display: 'flex', mt: 5 }}>
                 <UserInfoCard name="Nguyen Dinh Bao" />
-                    <Box sx={{ flex: 2 }}>
-                        <Typography variant="h4" gutterBottom>
-                            Đơn hàng
-                        </Typography>
-                        <Tabs
+                <Box sx={{ flex: 2 }}>
+                    <Typography variant="h4" gutterBottom>
+                        Đơn hàng
+                    </Typography>
+                    <Tabs
                         value={selectedTab}
                         onChange={handleTabChange}
                         aria-label="order status tabs"
@@ -82,13 +74,19 @@
                             <Tab key={index} label={label} />
                         ))}
                     </Tabs>
-                    {!loading && filterOrders(tabLabels[selectedTab]).map((order) => (
-                        <OrderCard key={order.id} order={order} />
-                    ))}
-                    </Box>
+                    {loading ? (
+                        <Typography>Loading...</Typography>
+                    ) : error ? (
+                        <Typography color="error">{error}</Typography>
+                    ) : (
+                        filterOrders(tabLabels[selectedTab]).map((order) => (
+                            <OrderCard key={order.id} order={order} />
+                        ))
+                    )}
                 </Box>
-            </Container>
-        );
-    };
+            </Box>
+        </Container>
+    );
+};
 
-    export default OrderList;
+export default OrderList;
