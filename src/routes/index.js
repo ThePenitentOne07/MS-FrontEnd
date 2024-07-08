@@ -38,6 +38,7 @@ import PrivateRoute from '../contexts/PrivateRoute';
 import TrasactionStatus from '../pages/TrasactionStatus';
 // import CreatePost from '../staffPages/EditorComponent';
 import EditorComponent from '../staffPages/EditorComponent';
+import SearchPage from '../pages/SearchPage';
 function Router() {
   return (
     <AuthProvider>
@@ -58,6 +59,7 @@ function Router() {
             <Route path="/orderstatus/:orderId" element={<OrderStatus />} />
             <Route path="toship" element={<OrderList />} />
             <Route path="transStatus" element={<TrasactionStatus />} />
+            <Route path="search/:searchTerm" element={<SearchPage />} />
           </Route>
           <Route element={<BlankLayout />} >
 

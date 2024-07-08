@@ -76,6 +76,7 @@ export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+    const [searchTerm, setSearchTerm] = React.useState('');
 
     React.useEffect(() => {
         const user = localStorage.getItem("user");
@@ -111,6 +112,12 @@ export default function PrimarySearchAppBar() {
 
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
+    };
+
+    const handleSearchKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            navigate(`/search/${searchTerm}`);
+        }
     };
 
     const menuId = "primary-search-account-menu";
@@ -207,11 +214,15 @@ export default function PrimarySearchAppBar() {
                             <StyledInputBase
                                 placeholder="Tìm sản phẩm…"
                                 inputProps={{ "aria-label": "search" }}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={handleSearchKeyDown}
                             />
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />
                         <Typography
                             variant="h6"
+                            name="searchTerm"
                             noWrap
                             component="div"
                             sx={{ display: { xs: "none", sm: "block" } }}
@@ -225,7 +236,8 @@ export default function PrimarySearchAppBar() {
                                 aria-label="show 4 new mails"
                                 color="inherit"
                             >
-                                <Badge badgeContent={4} color="error">
+                                <Badge color="error">
+                                    {/* badgeContent */}
                                     <ShoppingCartIcon />
                                 </Badge>
                             </IconButton>

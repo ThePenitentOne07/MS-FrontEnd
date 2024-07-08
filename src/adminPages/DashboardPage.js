@@ -30,7 +30,12 @@ export default function Dashboard() {
     const fetchOrdersByYear = async (year) => {
       try {
         const response = await apiService.get(
-          `/api/statistics/orders/by-year/${year}`
+          `/api/statistics/orders/by-year/${year}`,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
         );
         const ordersByMonthData = response.data.result;
         const transformedOrdersByMonthData = Object.entries(
@@ -57,20 +62,45 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       const orderStatusResponse = await apiService.get(
-        "/api/statistics/orders/status/breakdown"
+        "/api/statistics/orders/status/breakdown",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
       const totalOrdersResponse = await apiService.get(
-        "/api/statistics/orders/total"
+        "/api/statistics/orders/total",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
       const totalRevenueResponse = await apiService.get(
-        "/api/statistics/orders/revenue/total"
+        "/api/statistics/orders/revenue/total",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
       const averageRevenueResponse = await apiService.get(
-        "/api/statistics/orders/revenue/average"
+        "/api/statistics/orders/revenue/average",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
 
       const orderStatusBreakdownResponse = await apiService.get(
-        "/api/statistics/orders/status/breakdown"
+        "/api/statistics/orders/status/breakdown",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
 
       setOrderStatusBreakdown(orderStatusResponse.data.result);

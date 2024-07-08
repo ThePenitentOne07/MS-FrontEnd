@@ -30,7 +30,6 @@ const statusColorMapping = {
   PAID: '#32CD32', // Yellow
   IN_DELIVERY: '#1E90FF', // Blue
   CANNOT_DELIVER: '#FF4500', // Red
-
 };
 
 const OrderListStaff = () => {
@@ -40,6 +39,7 @@ const OrderListStaff = () => {
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState('');
   const [orderDetail, setOrderDetail] = useState([]);
+  const [productDetail, setProductDetail] = useState([]);
   const token = localStorage.getItem("token");
   const [selectedOrderStatus, setSelectedOrderStatus] = useState(null);
   const [file, setFile] = useState('');
@@ -55,6 +55,7 @@ const OrderListStaff = () => {
           }
         });
         setOrderDetail(res.data.result);
+        setProductDetail(res.data.result.cart)
       } catch (error) {
         console.error("Failed to fetch order details", error);
       }
@@ -229,7 +230,7 @@ const OrderListStaff = () => {
         </Table>
       </StyledTableContainer>
       {selectedOrderStatus && (
-        <Dialog open={true} onClose={handleClose}>
+        <Dialog open={true} onClose={handleClose} maxWidth="lg">
           <DialogTitle>Order Details</DialogTitle>
           <DialogContent>
             <Typography>Order ID: {orderDetail.id}</Typography>
@@ -239,6 +240,30 @@ const OrderListStaff = () => {
             {orderDetail.Status === 'CANNOT_DELIVER' && (
               <Typography>Failure Reason: {orderDetail.failureReasonNote}</Typography>
             )}
+            <StyledTableCell>
+              <Table stickyHeader aria-label="order table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Product Name</StyledTableCell>
+                    <StyledTableCell>Price</StyledTableCell>
+                    <StyledTableCell>Quantity</StyledTableCell>
+                    <StyledTableCell>Product ID</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {productDetail.map((product) => (
+                    <TableRow
+                      key={product.productId}
+                    >
+                      <TableCell>{product.productName}</TableCell>
+                      <TableCell>{product.price}</TableCell>
+                      <TableCell>{product.quantity}</TableCell>
+                      <TableCell>{product.productId}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </StyledTableCell>
           </DialogContent>
           <DialogActions>
             {selectedOrderStatus.orderStatus === 'PAID' && (
@@ -264,6 +289,7 @@ const OrderListStaff = () => {
       <Dialog
         open={isDenyFormOpen}
         onClose={handleClose}
+        maxWidth="lg"
       >
         <DialogTitle>Reason for Denial</DialogTitle>
         <DialogContent>

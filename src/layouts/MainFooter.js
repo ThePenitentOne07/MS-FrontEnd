@@ -9,17 +9,17 @@ const MainFooter = () => {
                 py: 3,
                 px: 2,
                 mt: 'auto',
-                backgroundColor: (theme) =>
-                    theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+                backgroundColor: "#e0a8e3",
+                color: "white"
             }}
         >
             <Typography variant="body1" align="center">
-                &copy; {new Date().getFullYear()} My Company
+                &copy; {new Date().getFullYear()} Sữa mẹ và bé
             </Typography>
-            <Typography variant="body2" color="textSecondary" align="center">
-                {'Built with '}
+            <Typography variant="body2" color="white" align="center" >
+                {'Giới thiệu về '}
                 <Link color="inherit" href="https://mui.com/">
-                    Material-UI
+                    Sữa mẹ và bé
                 </Link>
                 {'.'}
             </Typography>

@@ -85,7 +85,7 @@ function HomePage() {
                     <Stack spacing={2} sx={{ position: 'fixed', width: 'inherit' }}>
                         <CategorySidebar />
                         <FormProvider methods={methods}>
-                            <ProductFilter resetFilter={reset} />
+
                         </FormProvider>
                     </Stack>
                 </Grid>

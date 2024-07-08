@@ -12,7 +12,8 @@ const OrderCard = ({ order }) => {
     const statusMapping = {
         PAID: { label: 'Đang xác nhận', color: '#4caf50' }, // Green
         IN_DELIVERY: { label: 'Đang giao', color: '#2196f3' }, // Blue
-        CANNOT_DELIVER: { label: 'Tạm hoãn', color: '#f44336' } // Red
+        CANNOT_DELIVER: { label: 'Tạm hoãn', color: '#f44336' }, // Red
+        COMPLETE_EXCANGE: { label: 'đã giao', color: '#4caf50' }
     };
 
     const status = statusMapping[order.orderStatus];

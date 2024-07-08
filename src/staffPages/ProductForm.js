@@ -55,7 +55,7 @@ function ProductForm({ categories, onClose }) {
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-      await apiService.post("/api/products", formDataToSend, {
+      await apiService.post("/api/products/", formDataToSend, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
           "Content-Type": "multipart/form-data",
