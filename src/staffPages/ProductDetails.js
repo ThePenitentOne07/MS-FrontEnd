@@ -127,7 +127,15 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
 
   const handleProductDelete = async () => {
     try {
-      await apiService.patch(`/api/products/${product.productID}/delete`);
+      await apiService.patch(
+        `/api/products/${product.productID}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
       onDeleteSuccess();
       onClose();
     } catch (error) {
