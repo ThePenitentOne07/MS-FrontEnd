@@ -10,6 +10,7 @@ import { FormProvider } from 'react-hook-form';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxHeight: 600, // Set a height for the table container
+    
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

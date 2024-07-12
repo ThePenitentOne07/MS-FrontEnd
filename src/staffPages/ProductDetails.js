@@ -83,6 +83,9 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
+      for (const key in formData) {
+        console.log(key + ': ' + formData[key]);
+      }
       await apiService.patch(
         `/api/products/${product.productID}`,
         formDataToSend,

@@ -233,7 +233,7 @@ function DetailPage() {
                                                                 width: 1,
                                                                 height: 1,
                                                             }}
-                                                            src={product.image}
+                                                            src={product.productImage}
                                                             alt="product"
                                                         />
                                                     </Box>

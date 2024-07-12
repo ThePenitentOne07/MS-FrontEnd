@@ -219,7 +219,7 @@ const CartPage = () => {
                                 <CardMedia
                                     component="img"
                                     sx={{ width: 151 }}
-                                    image={item.cover || 'https://via.placeholder.com/151'} // Placeholder in case no image is provided
+                                    image={item.productImage} // Placeholder in case no image is provided
                                     alt={item.productName}
                                 />
                                 <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
