@@ -392,6 +392,7 @@ export default function Checkout() {
                   )}
 
                   <Button
+                    //  disabled={fullNameError || addressError || telNoError || isSubmitting}
                     variant="contained"
                     endIcon={<ChevronRightRoundedIcon />}
                     onClick={handleNext}

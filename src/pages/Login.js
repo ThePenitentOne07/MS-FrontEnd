@@ -47,7 +47,12 @@ function Login() {
             if (user.role === "ADMIN") {
                 navigate("/admin/dashboard", { replace: true });
             } else {
-                navigate(from, { replace: true });
+                if (user.role === ("SELLER" && "POST_STAFF" && "PRODUCT_STAFF")) {
+                    navigate("/staff/order", { replace: true });
+                } else {
+                    navigate(from, { replace: true });
+                }
+                // navigate(from, { replace: true });
             }
         } catch (error) {
             reset();

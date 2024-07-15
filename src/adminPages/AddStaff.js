@@ -22,12 +22,13 @@ import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../components/form/FormContext";
 import apiService from "../app/apiService";
 
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 const Schema = yup.object().shape({
   emailAddress: yup
     .string()
     .email("Email không hợp lệ")
     .required("Email không được để trống"),
-  phoneNumber: yup.string().required("Số điện thoại không được để trống"),
+  phoneNumber: yup.string().required("Số điện thoại không được để trống").matches(phoneRegExp, 'Số điện thoại không hợp lệ'),
   username: yup.string().required("Tên người dùng không được để trống"),
   password: yup.string().required("Mật khẩu không được để trống"),
   roleName: yup.string().required("Chức vụ không được để trống"),
@@ -73,7 +74,7 @@ function AddStaff() {
         }
       );
 
-      navigate("/staff"); // Navigate after successful submission
+      alert("Thêm nhân viên thành công"); // Navigate after successful submission
     } catch (error) {
       console.error("Error submitting form:", error);
       reset();

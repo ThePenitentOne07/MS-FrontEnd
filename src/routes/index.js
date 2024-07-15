@@ -34,11 +34,12 @@ import ProductForm from '../staffPages/ProductForm';
 import OTP from '../pages/OTP';
 import AddStaff from '../adminPages/AddStaff';
 import { FormContext2 } from '../components/form/FormContext';
-import PrivateRoute from '../contexts/PrivateRoute';
+// import PrivateRoute from '../contexts/AdminRoutes';
 import TrasactionStatus from '../pages/TrasactionStatus';
 // import CreatePost from '../staffPages/EditorComponent';
 import EditorComponent from '../staffPages/EditorComponent';
 import SearchPage from '../pages/SearchPage';
+import AdminRoutes from '../contexts/AdminRoutes';
 function Router() {
   return (
     <AuthProvider>
@@ -61,6 +62,7 @@ function Router() {
             <Route path="transStatus" element={<TrasactionStatus />} />
             <Route path="search/:searchTerm" element={<SearchPage />} />
           </Route>
+
           <Route element={<BlankLayout />} >
 
             <Route path="/login" element={<Login />} />
@@ -70,6 +72,7 @@ function Router() {
             <Route path='/fill' element={<FinnishRegistration />} />
             <Route path="/otp" element={<OTP />} />
           </Route>
+
           <Route element={<NoBubbleLayout />}>
 
           </Route>
@@ -77,12 +80,14 @@ function Router() {
             //admin route
 
           {/* <Route element={<PrivateRoute roles={['ADMIN']} />}> */}
-          <Route path='admin' element={<AdminLayout />}>
-            <Route index element={<WelcomeAdmin />} />
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="staff" element={<StaffManagement />} />
-            <Route path="customer" element={<CustomerManagement />} />
-            <Route path="newStaff" element={<AddStaff />} />
+          <Route element={<AdminRoutes />}>
+            <Route path='admin' element={<AdminLayout />}>
+              <Route index element={<WelcomeAdmin />} />
+              <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="staff" element={<StaffManagement />} />
+              <Route path="customer" element={<CustomerManagement />} />
+              <Route path="newStaff" element={<AddStaff />} />
+            </Route>
           </Route>
           {/* asdasd */}
       //staff route

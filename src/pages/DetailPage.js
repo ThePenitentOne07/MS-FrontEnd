@@ -337,6 +337,7 @@ function DetailPage() {
                 )}
             </Box>
             <Box sx={{ position: "relative", height: 1 }}>
+                <Typography/>
                 {/* {loading ? (
                     <LoadingScreen />
                 ) : (

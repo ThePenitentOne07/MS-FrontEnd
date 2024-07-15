@@ -43,10 +43,33 @@ const districts = [
 ];
 
 export default function AddressForm({ district, setDistrict }) {
-
+  const [fullName, setFullName] = React.useState('');
+  const [fullNameError, setFullNameError] = React.useState(false);
+  const [address, setAddress] = React.useState('');
+  const [addressError, setAddressError] = React.useState(false);
+  const [telNo, setTelNo] = React.useState('');
+  const [telNoError, setTelNoError] = React.useState(false);
 
   const handleDistrictChange = (event) => {
     setDistrict(event.target.value);
+  };
+
+  const handleFullNameChange = (event) => {
+    const value = event.target.value;
+    setFullName(value);
+    setFullNameError(value.trim() === '');
+  };
+
+  const handleAddressChange = (event) => {
+    const value = event.target.value;
+    setAddress(value);
+    setAddressError(value.trim() === '');
+  };
+
+  const handleTelNoChange = (event) => {
+    const value = event.target.value;
+    setTelNo(value);
+    setTelNoError(!/^\d{10,11}$/.test(value));
   };
 
   return (
@@ -59,7 +82,10 @@ export default function AddressForm({ district, setDistrict }) {
           id="fullName"
           name="fullName"
           type="text"
-          placeholder=""
+          value={fullName}
+          onChange={handleFullNameChange}
+          error={fullNameError}
+          helperText={fullNameError ? 'Họ và tên không được để trống' : ''}
           autoComplete="family-name"
           required
           variant="outlined"
@@ -73,7 +99,10 @@ export default function AddressForm({ district, setDistrict }) {
           id="address"
           name="address"
           type="text"
-          placeholder=""
+          value={address}
+          onChange={handleAddressChange}
+          error={addressError}
+          helperText={addressError ? 'Địa chỉ không được để trống' : ''}
           autoComplete="shipping address-line1"
           required
           variant="outlined"
@@ -111,13 +140,15 @@ export default function AddressForm({ district, setDistrict }) {
           id="telNo"
           name="telNo"
           type="text"
-          placeholder=""
+          value={telNo}
+          onChange={handleTelNoChange}
+          error={telNoError}
+          helperText={telNoError ? 'Số điện thoại không hợp lệ' : ''}
           autoComplete="telNo"
           required
           variant="outlined"
         />
       </FormGrid>
-
     </Grid>
   );
 }
