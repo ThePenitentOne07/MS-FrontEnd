@@ -80,15 +80,15 @@ function Router() {
             //admin route
 
           {/* <Route element={<PrivateRoute roles={['ADMIN']} />}> */}
-          <Route element={<AdminRoutes />}>
-            <Route path='admin' element={<AdminLayout />}>
-              <Route index element={<WelcomeAdmin />} />
-              <Route path="dashboard" element={<DashboardPage />} />
-              <Route path="staff" element={<StaffManagement />} />
-              <Route path="customer" element={<CustomerManagement />} />
-              <Route path="newStaff" element={<AddStaff />} />
-            </Route>
+          {/* <Route element={<AdminRoutes />}> */}
+          <Route path='admin' element={<AdminLayout />}>
+            <Route index element={<WelcomeAdmin />} />
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="staff" element={<StaffManagement />} />
+            <Route path="customer" element={<CustomerManagement />} />
+            <Route path="newStaff" element={<AddStaff />} />
           </Route>
+          {/* </Route> */}
           {/* asdasd */}
       //staff route
           <Route path='staff' element={<StaffLayout />}>

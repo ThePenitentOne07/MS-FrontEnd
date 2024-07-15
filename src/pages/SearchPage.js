@@ -16,6 +16,7 @@ function SearchPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const params = useParams();
+
     useEffect(() => {
         if (params.searchTerm) {
             const token = localStorage.getItem("token");
@@ -27,10 +28,9 @@ function SearchPage() {
                             'Authorization': 'Bearer ' + token
                         }
                     });
-                    // Ensure res.data is an array
-                    setProducts(res.data.result);
+                    // Ensure res.data.result is an array
+                    setProducts(res.data.result || []);
                     setError("");
-
                 } catch (error) {
                     console.log(error);
                     setError(error.message);
@@ -38,19 +38,15 @@ function SearchPage() {
                 setLoading(false);
             };
 
-            // const { watch, reset } = methods;
-            // const filters = watch();
-            // const filterProducts = applyFilter(products, filters);
-
             getProducts();
         }
-    }, []);
+    }, [params]);
+
     return (
         <Container sx={{ display: "flex", minHeight: "100vh" }}>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={4} md={3}>
                     <Stack spacing={2} sx={{ position: 'fixed', width: 'inherit' }}>
-
                         {/* <FormProvider methods={methods}> */}
                         {/* <ProductFilter /> */}
                         {/* </FormProvider> */}
@@ -58,7 +54,7 @@ function SearchPage() {
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                     <Stack sx={{ flexGrow: 1 }}>
-                        <FormProvider >
+                        <FormProvider>
                             <Stack
                                 spacing={2}
                                 direction={{ xs: "column", sm: "row" }}
@@ -78,19 +74,23 @@ function SearchPage() {
                                         <Alert severity="error">{error}</Alert>
                                     ) : (
                                         <>
-                                            <Box mb={2} sx>
+                                            <Box mb={2}>
                                                 <Typography variant="h4" gutterBottom noWrap>
-
+                                                    {/* Title or Heading */}
                                                 </Typography>
                                             </Box>
-                                            <ProductList result={result} />
-
+                                            {result.length > 0 ? (
+                                                <ProductList result={result} />
+                                            ) : (
+                                                <Typography variant="h2">
+                                                    Không có sản phẩm bạn tìm
+                                                </Typography>
+                                            )}
                                         </>
                                     )}
                                 </>
                             )}
                         </Box>
-
                     </Stack>
                 </Grid>
             </Grid>
@@ -98,6 +98,4 @@ function SearchPage() {
     );
 }
 
-
-
-export default SearchPage
+export default SearchPage;

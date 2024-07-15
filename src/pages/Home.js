@@ -80,130 +80,73 @@ function HomePage() {
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh" }}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={4} md={3}>
-                    <Stack spacing={2} sx={{ position: 'fixed', width: 'inherit' }}>
-                        <CategorySidebar />
-                        <FormProvider methods={methods}>
+            <Stack>
+                {/* <Grid container spacing={3}> */}
+                {/* <Grid item xs={12} sm={4} md={3}> */}
+                <CategorySidebar />
 
-                        </FormProvider>
-                    </Stack>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                    <Stack sx={{ flexGrow: 1 }}>
-                        <FormProvider methods={methods}>
-                            <Stack
-                                spacing={2}
-                                direction={{ xs: "column", sm: "row" }}
-                                alignItems={{ sm: "center" }}
-                                justifyContent="space-between"
-                                mb={2}
-                            >
-                                {/* Add form elements or filter components here if needed */}
-                            </Stack>
-                        </FormProvider>
-                        <Box sx={{ position: "relative", height: 1 }}>
-                            {loading ? (
-                                <LoadingScreen />
-                            ) : (
-                                <>
-                                    {error ? (
-                                        <Alert severity="error">{error}</Alert>
-                                    ) : (
-                                        <>
-                                            <Box mb={2} sx>
-                                                <Typography variant="h4" gutterBottom noWrap>
-                                                    Thịnh Hành
-                                                </Typography>
-                                            </Box>
-                                            <ProductList result={result.slice(0, 8)} />
-                                            <Box mb={2}>
-                                                <Typography variant="h4" gutterBottom noWrap>
-                                                    Sữa cho mẹ bầu
-                                                </Typography>
-                                            </Box>
-                                            <ProductList result={result.slice(0, 8)} />
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </Box>
-                        <Box marginTop={3} marginBottom={10}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                <Typography variant="h4" gutterBottom noWrap>
-                                    Bài viết bổ ích
+
+                {/* </Grid> */}
+                {/* <Grid item xs={12} sm={8} md={9}> */}
+                <Stack sx={{ flexGrow: 1, marginTop: 5 }}>
+
+                    <Box sx={{ position: "relative", height: 1 }}>
+                        {loading ? (
+                            <LoadingScreen />
+                        ) : (
+                            <>
+                                {error ? (
+                                    <Alert severity="error">{error}</Alert>
+                                ) : (
+                                    <>
+                                        <Box mb={2} sx>
+                                            <Typography variant="h4" gutterBottom noWrap>
+                                                Thịnh Hành
+                                            </Typography>
+                                        </Box>
+                                        <ProductList result={result.slice(0, 8)} />
+                                        <Box mb={2}>
+                                            <Typography variant="h4" gutterBottom noWrap>
+                                                Sữa cho mẹ bầu
+                                            </Typography>
+                                        </Box>
+                                        <ProductList result={result.slice(0, 8)} />
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </Box>
+                    <Box marginTop={3} marginBottom={10}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                            <Typography variant="h4" gutterBottom noWrap>
+                                Bài viết bổ ích
+                            </Typography>
+                            <Link href="/post" underline="hover">
+                                <Typography gutterBottom>
+                                    Xem thêm
                                 </Typography>
-                                <Link href="/post" underline="hover">
-                                    <Typography gutterBottom>
-                                        Xem thêm
-                                    </Typography>
-                                </Link>
-                            </Box>
-                            <Grid container spacing={3}>
-                                {blogs.map((blog) => (
-                                    <Grid item xs={12} sm={6} md={4} key={blog.id}>
-                                        <BlogCard
-                                            image={blog.image}
-                                            title={blog.title}
-                                            description={blog.description}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
+                            </Link>
                         </Box>
-                    </Stack>
-                </Grid>
-            </Grid>
+                        <Grid container spacing={3}>
+                            {blogs.map((blog) => (
+                                <Grid item xs={12} sm={6} md={4} key={blog.id}>
+                                    <BlogCard
+                                        image={blog.image}
+                                        title={blog.title}
+                                        description={blog.description}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                </Stack>
+                {/* </Grid> */}
+                {/* </Grid> */}
+            </Stack>
         </Container>
     );
 }
 
-function applyFilter(products, filters) {
-    const { sortBy } = filters;
-    let filteredProducts = products;
 
-    // SORT BY
-    if (sortBy === "featured") {
-        filteredProducts = orderBy(products, ["sold"], ["desc"]);
-    }
-    if (sortBy === "newest") {
-        filteredProducts = orderBy(products, ["createdAt"], ["desc"]);
-    }
-    if (sortBy === "priceDesc") {
-        filteredProducts = orderBy(products, ["price"], ["desc"]);
-    }
-    if (sortBy === "priceAsc") {
-        filteredProducts = orderBy(products, ["price"], ["asc"]);
-    }
-
-    // FILTER PRODUCTS
-    if (filters.gender.length > 0) {
-        filteredProducts = products.filter((product) =>
-            filters.gender.includes(product.gender)
-        );
-    }
-    if (filters.category !== "All") {
-        filteredProducts = products.filter(
-            (product) => product.category === filters.category
-        );
-    }
-    if (filters.priceRange) {
-        filteredProducts = products.filter((product) => {
-            if (filters.priceRange === "below") {
-                return product.price < 25;
-            }
-            if (filters.priceRange === "between") {
-                return product.price >= 25 && product.price <= 75;
-            }
-            return product.price > 75;
-        });
-    }
-    if (filters.searchQuery) {
-        filteredProducts = products.filter((product) =>
-            product.name.toLowerCase().includes(filters.searchQuery.toLowerCase())
-        );
-    }
-    return filteredProducts;
-}
 
 export default HomePage;

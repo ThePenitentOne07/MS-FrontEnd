@@ -207,16 +207,18 @@ export default function PrimarySearchAppBar() {
                         >
                             Cửa hàng sữa
                         </Typography>
-                        <Search>
+                        <Search style={{ backgroundColor: "white" }}>
                             <SearchIconWrapper>
-                                <SearchIcon />
+                                <SearchIcon style={{ color: "black" }} />
                             </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Tìm sản phẩm…"
                                 inputProps={{ "aria-label": "search" }}
+
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 onKeyDown={handleSearchKeyDown}
+                                style={{ color: "black" }}
                             />
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />

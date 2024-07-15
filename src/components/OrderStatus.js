@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Container, List, ListItem, ListItemText, Stepper, Step, StepLabel, Paper, Divider } from '@mui/material';
+import { Box, Typography, Container, List, ListItem, ListItemText, Stepper, Step, StepLabel, Paper, Divider, Button } from '@mui/material';
 import apiService from '../app/apiService';
 
 const OrderStatus = () => {
@@ -136,6 +136,14 @@ const OrderStatus = () => {
                             ))}
                         </Stepper>
                     </Box>
+                    {order.orderStatus === "COMPLETE_EXCHANGE" && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            // onClick={handleSubmit}
+                            sx={{ mt: 3 }}
+                        >Đánh giá sản phẩm</Button>
+                    )}
                 </Paper>
             </Box>
         </Container >

@@ -6,7 +6,7 @@ const AdminRoutes = () => {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (user.role == "ADMIN") {
+        if (`${user.role}` === "ADMIN") {
             setIsAdmin(true);
         }
     }, []); // Added an empty dependency array to ensure it only runs once
