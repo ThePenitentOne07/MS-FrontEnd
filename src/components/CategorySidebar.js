@@ -26,7 +26,7 @@ const SidebarContainer = styled('div')(({ theme }) => ({
     backgroundColor: '#fff',
     borderRight: '1px solid #ddd',
     padding: '10px 0',
-    height: '300px',
+    height: '530px',
     marginTop: '10px',
 }));
 
@@ -82,8 +82,33 @@ function CategorySidebar() {
                     </List>
                 </SidebarContainer>
             </Grid>
-            <Grid item xs={9} >
-                <img src="https://suabottot.com/wp-content/uploads/2024/05/suabottot-737x455.png" alt="Sidebar Image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Grid item xs={9}>
+                <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
+                    <div className="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div className="carousel-inner">
+                        <div className="carousel-item active">
+                            <img src="https://suabottot.com/wp-content/uploads/2024/05/suabottot-737x455.png" className="d-block w-100" alt="First slide" style={{ height: '100%', objectFit: 'cover' }} />
+                        </div>
+                        <div className="carousel-item">
+                            <img src="https://suabottot.com/wp-content/uploads/elementor/thumbs/1-mua-sua-tang-qua-sua-bot-tot-ot73bz13tll6szo8mf1eljrgyrfod5b6yutnlhx0hq.png" className="d-block w-100" alt="Second slide" style={{ height: '100%', objectFit: 'cover' }} />
+                        </div>
+                        <div className="carousel-item">
+                            <img src="https://via.placeholder.com/737x455.png" className="d-block w-100" alt="Third slide" style={{ height: '100%', objectFit: 'cover' }} />
+                        </div>
+                    </div>
+                    <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span className="visually-hidden">Next</span>
+                    </button>
+                </div>
             </Grid>
         </Grid>
     );

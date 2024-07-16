@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import ChatIcon from '@mui/icons-material/Chat';
 import PhoneIcon from '@mui/icons-material/Phone';
+import FacebookIcon from '@mui/icons-material/Facebook';
 
 const CircleButton = styled(IconButton)(({ theme }) => ({
     width: 56,
@@ -32,8 +33,8 @@ function CommunicationLinks() {
                 <CircleButton href="mailto:your-email@example.com">
                     <EmailIcon />
                 </CircleButton>
-                <CircleButton href="https://your-chat-platform.com">
-                    <ChatIcon />
+                <CircleButton href="https://www.facebook.com/profile.php?id=61561052990853" target="_blank">
+                    <FacebookIcon />
                 </CircleButton>
                 <CircleButton href="tel:+1234567890">
                     <PhoneIcon />

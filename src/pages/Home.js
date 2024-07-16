@@ -1,5 +1,5 @@
 
-import { Container, Alert, Box, Stack, Grid, Typography } from '@mui/material';
+import { Container, Alert, Box, Stack, Grid, Typography, CardMedia } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import ProductList from '../components/ProductList';
 import apiService from '../app/apiService';
@@ -104,13 +104,37 @@ function HomePage() {
                                                 Thịnh Hành
                                             </Typography>
                                         </Box>
-                                        <ProductList result={result.slice(0, 8)} />
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={4}>
+                                                <CardMedia
+                                                    component="img"
+                                                    image="https://suabottot.com/wp-content/uploads/2020/01/khuyen-mai-baner.jpg"
+                                                    alt="Your Image"
+                                                    style={{ marginTop: "25px", height: "600px" }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={8}>
+                                                <ProductList result={result.slice(0, 8)} />
+                                            </Grid>
+                                        </Grid>
                                         <Box mb={2}>
                                             <Typography variant="h4" gutterBottom noWrap>
                                                 Sữa cho mẹ bầu
                                             </Typography>
                                         </Box>
-                                        <ProductList result={result.slice(0, 8)} />
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={4}>
+                                                <CardMedia
+                                                    component="img"
+                                                    image="https://suabottot.com/wp-content/uploads/2020/01/khuyen-mai-baner.jpg"
+                                                    alt="Your Image"
+                                                    style={{ marginTop: "25px", height: "600px" }}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={8}>
+                                                <ProductList result={result.slice(0, 8)} />
+                                            </Grid>
+                                        </Grid>
                                     </>
                                 )}
                             </>

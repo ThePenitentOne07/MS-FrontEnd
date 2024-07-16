@@ -4,7 +4,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import ForgotPassword from '../pages/ForgotPassword';
 import BlankLayout from '../layouts/BlankLayout';
-import Home from '../pages/Home';
+import HomePage from '../pages/Home';
 import MainLayout from '../layouts/MainLayout';
 import DetailPage from '../pages/DetailPage';
 import Cart from '../pages/Cart';
@@ -49,7 +49,7 @@ function Router() {
 
 
           <Route path="/" element={<MainLayout />} >
-            <Route index element={<Home />} />
+            <Route index element={<HomePage />} />
             <Route path="product/:productID" element={<DetailPage />} />
             <Route path='editAcc' element={<EditCustomerAccount />} />
             <Route path='purchase' element={<PurchaseHistory />} />
