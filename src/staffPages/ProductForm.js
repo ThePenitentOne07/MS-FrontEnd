@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -9,12 +9,44 @@ import {
   MenuItem,
   TextField,
   InputLabel,
+  Alert,
+  styled,
 } from "@mui/material";
 import apiService from "../app/apiService";
 import { LoadingButton } from "@mui/lab";
-import { entries } from "lodash";
+import dayjs from "dayjs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+const HelperTextTypography = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
+  fontSize: theme.typography.caption.fontSize,
+  marginLeft: theme.spacing(1),
+}));
+
+const StyledDatePicker = styled(DatePicker)(({ theme, error }) => ({
+  "& .MuiInputBase-root": {
+    borderBottom: `1px solid ${error ? theme.palette.error.main : theme.palette.grey[500]
+      }`, // Set border color based on error state
+    borderRadius: theme.shape.borderRadius,
+    paddingBottom: theme.spacing(0.12), // Add some padding for label
+    "& fieldset": {
+      // Target fieldset element for border visibility
+      border: "none", // Remove default fieldset border
+    },
+  },
+  "& .Mui-focused .MuiInputBase-root": {
+    // Add focus style (optional)
+    borderColor: theme.palette.primary.main,
+  },
+}));
 
 function ProductForm({ categories, onClose }) {
+  const initialCategoryID = categories.length > 0 ? categories[0].id : "";
+  const [errorDisplay, setErrorDisplay] = useState("")
+
   const [formData, setFormData] = useState({
     productName: "",
     price: "",
@@ -22,11 +54,98 @@ function ProductForm({ categories, onClose }) {
     productDescription: "",
     manuDate: "",
     expiDate: "",
-    categoryID: "",
+    categoryID: initialCategoryID,
     productImage: null,
   });
   const [isDirty, setIsDirty] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({
+    productName: "",
+    price: "",
+    quantity: "",
+    productDescription: "",
+    manuDate: "",
+    expiDate: "",
+  });
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setFormData((prevData) => ({
+        ...prevData,
+        categoryID: categories[0].id,
+      }));
+    }
+  }, [categories]);
+
+  const validateField = (fieldName, value) => {
+    let errorMessage = "";
+
+    switch (fieldName) {
+      case "productName":
+        errorMessage = value.trim() ? "" : "Tên sản phẩm không được để trống.";
+        break;
+      case "price":
+        const price = parseFloat(value);
+        errorMessage =
+          isNaN(price) || price <= 0
+            ? "Giá sản phẩm phải là số lớn hơn 0."
+            : "";
+        break;
+      case "quantity":
+        const quantity = parseInt(value);
+        errorMessage =
+          isNaN(quantity) || quantity <= 0
+            ? "Số lượng sản phẩm phải là số nguyên lớn hơn 0."
+            : "";
+        break;
+      case "productDescription":
+        errorMessage = value.trim()
+          ? ""
+          : "Mô tả sản phẩm không được để trống.";
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: errorMessage,
+    }));
+  };
+
+  const validateDate = (fieldName, value) => {
+    let errorMessage = "";
+
+    const currentDate = dayjs();
+
+    switch (fieldName) {
+      case "manuDate":
+        const manuDate = dayjs(value);
+        errorMessage =
+          !manuDate.isValid() || manuDate.isAfter(currentDate)
+            ? "Ngày sản xuất không hợp lệ."
+            : "";
+        break;
+      case "expiDate":
+        const expiDate = dayjs(value);
+        errorMessage =
+          !expiDate.isValid() ||
+            expiDate.isBefore(currentDate, "day") ||
+            (formData.manuDate &&
+              dayjs(formData.manuDate).isValid() &&
+              expiDate.isBefore(dayjs(formData.manuDate), "day"))
+            ? "Ngày hết hạn không hợp lệ."
+            : "";
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: errorMessage,
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +154,20 @@ function ProductForm({ categories, onClose }) {
       setIsDirty(Object.values(updatedData).some((value) => value !== ""));
       return updatedData;
     });
+    validateField(name, value);
+  };
+
+  const handleDateChange = (name, date) => {
+    console.log(name + ": " + date);
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: dayjs(date).format("YYYY-MM-DD"),
+      };
+      setIsDirty(true);
+      return updatedData;
+    });
+    validateDate(name, date.format("YYYY-MM-DD"));
   };
 
   const handleImageChange = (e) => {
@@ -51,21 +184,29 @@ function ProductForm({ categories, onClose }) {
   };
 
   const handleSubmit = async () => {
+    let isError = false;
+    for (const key in errors) {
+      if (errors[key] !== "") isError = true;
+    }
+    if (isError || formData.productImage == null) {
+      window.alert(
+        "Vui lòng kiểm tra lại các trường nhập và nhập đúng thông tin"
+      );
+      return;
+    }
     try {
       const formDataToSend = new FormData();
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
-      for (const key in formData) {
-        console.log(key + ': ' + formData[key]);
-      }
-      await apiService.post("/api/products/", formDataToSend, {
+      await apiService.post("/api/products", formDataToSend, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
           "Content-Type": "multipart/form-data",
         },
       });
       onClose();
+      window.alert("Thêm sản phẩm thành công!");
     } catch (error) {
       console.error("Error creating product:", error);
     }
@@ -88,6 +229,7 @@ function ProductForm({ categories, onClose }) {
           Tạo sản phẩm mới
         </Typography>
       </Box>
+      {errorDisplay && <Alert severity="error">{errorDisplay}</Alert>}
       <form onSubmit={(e) => e.preventDefault()}>
         <TextField
           label="Tên sản phẩm"
@@ -96,6 +238,8 @@ function ProductForm({ categories, onClose }) {
           margin="normal"
           value={formData.productName}
           onChange={handleChange}
+          error={!!errors.productName}
+          helperText={errors.productName}
         />
         <TextField
           label="Giá thành"
@@ -104,6 +248,8 @@ function ProductForm({ categories, onClose }) {
           margin="normal"
           value={formData.price}
           onChange={handleChange}
+          error={!!errors.price}
+          helperText={errors.price}
         />
         <TextField
           label="Số lượng"
@@ -112,6 +258,8 @@ function ProductForm({ categories, onClose }) {
           margin="normal"
           value={formData.quantity}
           onChange={handleChange}
+          error={!!errors.quantity}
+          helperText={errors.quantity}
         />
         <TextField
           name="productDescription"
@@ -122,23 +270,39 @@ function ProductForm({ categories, onClose }) {
           value={formData.productDescription}
           rows={4}
           onChange={handleChange}
+          error={!!errors.productDescription}
+          helperText={errors.productDescription}
         />
-        <TextField
-          label="Ngày sản xuất"
-          name="manuDate"
-          fullWidth
-          margin="normal"
-          value={formData.manuDate}
-          onChange={handleChange}
-        />
-        <TextField
-          label="Ngày hết hạn"
-          name="expiDate"
-          fullWidth
-          margin="normal"
-          value={formData.expiDate}
-          onChange={handleChange}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 3 }}>
+            <StyledDatePicker
+              format="DD-MM-YYYY"
+              label="Ngày sản xuất"
+              name="manuDate"
+              fullWidth
+              margin="normal"
+              value={dayjs(formData.manuDate)}
+              onChange={(date) => handleDateChange("manuDate", date)}
+              error={!!errors.manuDate}
+            />
+            {errors.manuDate && (
+              <HelperTextTypography>{errors.manuDate}</HelperTextTypography>
+            )}
+            <StyledDatePicker
+              format="DD-MM-YYYY"
+              label="Ngày hết hạn"
+              name="expiDate"
+              fullWidth
+              margin="normal"
+              value={dayjs(formData.expiDate)}
+              onChange={(date) => handleDateChange("expiDate", date)}
+              error={!!errors.expiDate}
+            />
+            {errors.expiDate && (
+              <HelperTextTypography>{errors.expiDate}</HelperTextTypography>
+            )}
+          </Box>
+        </LocalizationProvider>
         <FormControl fullWidth margin="normal">
           <InputLabel>Danh mục sản phẩm</InputLabel>
           <Select
@@ -165,8 +329,8 @@ function ProductForm({ categories, onClose }) {
             </Box>
           )}
           <Button variant="contained" component="label">
-            Tải lên hình ảnh
-            <input type="file" hidden onChange={handleImageChange} />
+            Tải lên hình ảnh (*)
+            <input type="file" hidden accept="image/*" onChange={handleImageChange} />
           </Button>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>

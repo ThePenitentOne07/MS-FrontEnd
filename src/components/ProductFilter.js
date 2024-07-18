@@ -1,5 +1,4 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import FMultiCheckbox from "./form/FMultiCheckbox";
 import FRadioGroup from "./form/FRadioGroup";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
@@ -10,7 +9,7 @@ export const SORT_BY_OPTIONS = [
   { value: "priceAsc", label: "Price: Low-High" },
 ];
 
-export const FILTER_GENDER_OPTIONS = [ "Mẹ", "Bé"];
+export const FILTER_GENDER_OPTIONS = ["Mẹ", "Bé"];
 
 export const FILTER_CATEGORY_OPTIONS = [
   "All",
@@ -27,17 +26,8 @@ export const FILTER_PRICE_OPTIONS = [
 
 function ProductFilter({ resetFilter }) {
   return (
-    <Stack spacing={2} sx={{ p: 3, width: 250 , mt: 10}}>
-      <Stack spacing={1}>
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          Dành cho
-        </Typography>
-        <FMultiCheckbox
-          name="gender"
-          options={FILTER_GENDER_OPTIONS}
-          sx={{ width: 1 }}
-        />
-      </Stack>
+    <Stack spacing={2} sx={{ p: 3, width: 250, mt: 10 }}>
+
       <Stack spacing={1}>
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
           Price
@@ -49,9 +39,9 @@ function ProductFilter({ resetFilter }) {
         />
       </Stack>
 
-      
 
-     
+
+
 
       <Box>
         <Button

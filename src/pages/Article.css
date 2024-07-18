@@ -1,0 +1,64 @@
+#article {
+    padding-top: 20px;
+    width: 900px;
+    text-align: justify;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#article h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+#article p {
+    margin-bottom: 15px;
+}
+
+#article img {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+    height: auto;
+}
+
+#article .font-medium {
+    font-size: 24px;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+#article .span_date {
+    opacity: 0.8;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#article .span_date .align-center {
+    display: flex;
+    align-items: center;
+}
+
+#article .span_date .icon-i {
+    line-height: 13px;
+}
+
+#article em {
+    font-style: italic;
+}
+
+#article strong {
+    font-weight: bold;
+}
+
+#article a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#article a:hover {
+    text-decoration: underline;
+}

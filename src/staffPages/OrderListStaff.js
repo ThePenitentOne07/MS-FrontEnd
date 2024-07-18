@@ -23,14 +23,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const statusMapping = {
   PAID: 'Paid',
   IN_DELIVERY: 'In Delivery',
-  CANNOT_DELIVER: 'Delay',
+  CANNOT_DELIVER: 'Can not deliver',
+  CANNOT_CONFIRM: 'Can not confirm',
   COMPLETE_EXCHANGE: 'Complete',
+
 };
 
 const statusColorMapping = {
   PAID: '#32CD32', // Yellow
   IN_DELIVERY: '#1E90FF', // Blue
   CANNOT_DELIVER: '#FF4500', // Red
+  CANNOT_CONFIRM: '#FF4500', // Red
 };
 
 const OrderListStaff = () => {
@@ -79,6 +82,7 @@ const OrderListStaff = () => {
         }
       });
       handleClose();
+      alert("Order complete")
     } catch (error) {
       console.error("Error accepting delay:", error);
     }
@@ -102,18 +106,23 @@ const OrderListStaff = () => {
   };
 
   const handleDenySubmit = async () => {
+    if (!denyReason) {
+      alert("Reason must not be empty")
+      return;
+    }
     try {
       await apiService.put(`api/orders/cancel/${selectedOrder}?reason=${denyReason}`, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      alert("Order delayed");
       handleClose();
     } catch (error) {
       console.error("Error denying order:", error);
     }
   };
-
+  console.log(denyReason);
   const handleCancelDeny = () => {
     handleClose();
   };
@@ -135,8 +144,9 @@ const OrderListStaff = () => {
           }
         }
       );
+      alert("Order completed!");
       handleClose();
-      toast.success("Order completed!");
+
     } catch (error) {
       console.error('Error completing order:', error);
       alert('Failed to complete the order. Please try again.');
@@ -186,6 +196,7 @@ const OrderListStaff = () => {
               <MenuItem value="PAID">Paid</MenuItem>
               <MenuItem value="IN_DELIVERY">In delivery</MenuItem>
               <MenuItem value="CANNOT_DELIVER">Delayed</MenuItem>
+
               <MenuItem value="COMPLETE_EXCHANGE">Complete</MenuItem>
             </Select>
           </FormControl>
@@ -239,7 +250,17 @@ const OrderListStaff = () => {
             <Typography>Phone Number: {orderDetail.receiverPhone}</Typography>
             <Typography>Address: {orderDetail.shippingAddress}</Typography>
             {orderDetail.orderStatus === 'CANNOT_DELIVER' && (
-              <Typography>Failure Reason: {orderDetail.failureReasonNote}</Typography>
+              <>
+                <Typography>Failure Reason: {orderDetail.failureReasonNote.split(';')[1].split('|')[0]}</Typography>
+                <Typography>Date : {orderDetail.failureReasonNote.split(';')[1].split('|')[1].split('T')[0]}</Typography>
+                <Typography>Time : {orderDetail.failureReasonNote.split(';')[1].split('|')[1].split('T')[1].split('.')[0]}</Typography>
+              </>
+            )}
+            {orderDetail.orderStatus === 'CANNOT_CONFIRM' && (
+              <>
+                <Typography>Failure Reason: {orderDetail.failureReasonNote}</Typography>
+
+              </>
             )}
             <StyledTableCell>
               <Table stickyHeader aria-label="order table">
@@ -270,13 +291,14 @@ const OrderListStaff = () => {
             {selectedOrderStatus.orderStatus === 'PAID' && (
               <>
                 <Button onClick={handleAccept} color="primary">Accept</Button>
-                <Button onClick={handleDeny} color="secondary">Deny</Button>
+                <Button onClick={handleDeny} color="secondary">Delay</Button>
               </>
             )}
             {selectedOrderStatus.orderStatus === 'IN_DELIVERY' && (
               <>
                 <input onChange={handleFileChange} type="file" id="file" accept="image/*" />
                 <Button onClick={handleComplete} color="primary">Order Complete</Button>
+                <Button onClick={handleDeny} color="secondary">Delay</Button>
               </>
             )}
             {selectedOrderStatus.orderStatus === 'CANNOT_DELIVER' && (

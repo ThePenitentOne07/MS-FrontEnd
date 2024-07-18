@@ -4,14 +4,15 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-
-const BlogCard = ({ image, title, description }) => {
+import { useNavigate } from 'react-router-dom';
+const BlogCard = ({ image, title, description, route }) => {
+  const navigate = useNavigate();
   return (
-    <Card sx={{ maxWidth: 345, border: '2px solid #cb8bcd' }} >
+    <Card onClick={() => navigate(`${route}`)} sx={{ maxWidth: 500, border: '2px solid #cb8bcd' }} >
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
+          height="200"
           image={image}
           alt={title}
         />
@@ -31,7 +32,14 @@ const BlogCard = ({ image, title, description }) => {
           >
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" noWrap sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <Typography variant="body2" color="text.secondary" component="div" sx={{
+            display: { xs: 'none', sm: 'block' },
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}>
             {description}
           </Typography>
         </CardContent>

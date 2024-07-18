@@ -2,22 +2,27 @@ import React from 'react';
 import { Grid, List, ListItem, ListItemText, Collapse, styled } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import OpacityIcon from '@mui/icons-material/Opacity';
+import { useNavigate } from 'react-router-dom';
+
 
 const categories = [
     {
-        name: 'DANH MỤC SỮA BỘT',
+        name: 'ORGANIC MILK',
         subcategories: [],
         icon: <OpacityIcon />,
+        route: "/category/1"
     },
     {
-        name: 'SỮA TĂNG CÂN CHO BÉ',
+        name: 'FLAVORED MILK',
         subcategories: [],
         icon: <OpacityIcon />,
+        route: "/category/2"
     },
     {
-        name: 'SỮA TƯƠI NHẬP KHẨU',
+        name: 'DAIRY ALTERNATIVES',
         subcategories: [],
         icon: <OpacityIcon />,
+        route: "/category/3"
     },
 ];
 
@@ -46,12 +51,10 @@ const CategoryIcon = styled('div')(({ theme }) => ({
 
 function CategorySidebar() {
     const [open, setOpen] = React.useState({});
+    const navigate = useNavigate();
 
     const handleClick = (category) => {
-        setOpen((prevOpen) => ({
-            ...prevOpen,
-            [category]: !prevOpen[category],
-        }));
+        navigate(category.route)
     };
 
     return (
@@ -61,7 +64,7 @@ function CategorySidebar() {
                     <List component="nav">
                         {categories.map((category) => (
                             <div key={category.name}>
-                                <CategoryItem button onClick={() => handleClick(category.name)}>
+                                <CategoryItem button onClick={() => handleClick(category)}>
                                     <CategoryIcon>{category.icon}</CategoryIcon>
                                     <ListItemText primary={category.name} />
                                     {category.subcategories.length > 0 && (open[category.name] ? <ExpandLess /> : <ExpandMore />)}

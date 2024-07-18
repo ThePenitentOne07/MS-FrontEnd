@@ -61,7 +61,11 @@ const CartPage = () => {
         fetchCartItems();
     }, []);
 
-
+    const handleKeyDown = (event) => {
+        if (event.key === '-' || event.key === 'e' || event.key === '.') {
+            event.preventDefault();
+        }
+    };
     if (loading) {
         return <p>Loading cart items...</p>;
     }
@@ -238,6 +242,7 @@ const CartPage = () => {
                                         <TextField
                                             type="number"
                                             value={item.quantity}
+                                            onKeyDown={handleKeyDown}
                                             onChange={(event) => handleQuantityChange(item.productId, event)}
                                             inputProps={{
                                                 min: 1,

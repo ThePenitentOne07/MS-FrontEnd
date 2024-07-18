@@ -11,37 +11,28 @@ import BlogCard from '../components/BlogCard';
 import { useParams } from 'react-router-dom';
 import Link from '@mui/material/Link';
 
-function SearchPage() {
+function CategoryPage() {
     const [result, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const params = useParams();
-
-    const defaultValues = {
-        priceRange: ""
-    }
-    const methods = useForm({
-        defaultValues,
-    });
-    const { watch, reset } = methods;
-    const filters = watch();
-    const filterProducts = applyFilter(result, filters);
-
-
+    console.log(params.variant);
     useEffect(() => {
-        if (params.searchTerm) {
+        if (params.variant) {
             const token = localStorage.getItem("token");
             const getProducts = async () => {
                 setLoading(true);
                 try {
-                    const res = await apiService.get(`/api/products/search?value=${params.searchTerm}`, {
+                    const res = await apiService.get("/api/products", {
                         headers: {
                             'Authorization': 'Bearer ' + token
                         }
                     });
-                    // Ensure res.data.result is an array
-                    setProducts(res.data.result.filter(product => product.visibilityStatus !== false) || []);
+                    // Ensure res.data is an array
+                    setProducts(res.data.result.filter(product => (product.categoryID == params.variant && product.visibilityStatus !== false)))
+                    // .filter(product => product.visibilityStatus !== false));
                     setError("");
+
                 } catch (error) {
                     console.log(error);
                     setError(error.message);
@@ -49,18 +40,23 @@ function SearchPage() {
                 setLoading(false);
             };
 
+            // const { watch, reset } = methods;
+            // const filters = watch();
+            // const filterProducts = applyFilter(products, filters);
+
             getProducts();
         }
     }, [params]);
+    console.log(result);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh" }}>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={4} md={3}>
                     <Stack spacing={2} sx={{ position: 'fixed', width: 'inherit' }}>
-                        <FormProvider methods={methods}>
-                            <ProductFilter resetFilter={reset} />
-                        </FormProvider>
+                        {/* <FormProvider methods={methods}> */}
+                        {/* <ProductFilter /> */}
+                        {/* </FormProvider> */}
                     </Stack>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
@@ -91,7 +87,7 @@ function SearchPage() {
                                                 </Typography>
                                             </Box>
                                             {result.length > 0 ? (
-                                                <ProductList result={filterProducts} />
+                                                <ProductList result={result} />
                                             ) : (
                                                 <Typography variant="h2">
                                                     Không có sản phẩm bạn tìm
@@ -108,20 +104,5 @@ function SearchPage() {
         </Container>
     );
 }
-function applyFilter(result, filters) {
-    const { sortBy } = filters;
-    let filteredProducts = result;
-    if (filters.priceRange) {
-        filteredProducts = result.filter((product) => {
-            if (filters.priceRange === "below") {
-                return product.price < 25;
-            }
-            if (filters.priceRange === "between") {
-                return product.price >= 25 && product.price <= 75;
-            }
-            return product.price > 75;
-        });
-    }
-    return filteredProducts;
-}
-export default SearchPage;
+
+export default CategoryPage;

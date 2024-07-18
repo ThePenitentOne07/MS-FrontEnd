@@ -43,11 +43,11 @@ function Login() {
 
         try {
             const user = await auth.login({ username, password });
-
+            console.log(user.role);
             if (user.role === "ADMIN") {
                 navigate("/admin/dashboard", { replace: true });
             } else {
-                if (user.role === ("SELLER" && "POST_STAFF" && "PRODUCT_STAFF")) {
+                if (user.role === ("SELLER") || user.role === ("PRODUCT_STAFF") || user.role === ("POST_STAFF")) {
                     navigate("/staff/order", { replace: true });
                 } else {
                     navigate(from, { replace: true });

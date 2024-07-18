@@ -137,6 +137,11 @@ function DetailPage() {
             // Optionally, handle errors, e.g., show error message to the user
         }
     };
+    const handleKeyDown = (event) => {
+        if (event.key === '-' || event.key === 'e' || event.key === '.') {
+            event.preventDefault();
+        }
+    };
 
 
 
@@ -287,6 +292,7 @@ function DetailPage() {
                                                         {product.priceSale}
                                                     </Box> */}
                                                     &nbsp;{product.price}
+                                                    {/* VND */}
                                                 </Typography>
 
                                                 <Divider sx={{ borderStyle: "dashed" }} />
@@ -305,9 +311,10 @@ function DetailPage() {
                                                         type="number"
                                                         value={quantity}
                                                         onChange={handleQuantityChange}
+                                                        onKeyDown={handleKeyDown}
                                                         inputProps={{
                                                             min: 1,
-                                                            max: 99,
+                                                            max: 999,
                                                             style: { textAlign: 'center' },
                                                         }}
                                                         sx={{ width: 60 }}
@@ -337,7 +344,7 @@ function DetailPage() {
                 )}
             </Box>
             <Box sx={{ position: "relative", height: 1 }}>
-                <Typography/>
+                <Typography />
                 {/* {loading ? (
                     <LoadingScreen />
                 ) : (

@@ -11,12 +11,13 @@ import BlogCard from '../components/BlogCard';
 import Link from '@mui/material/Link';
 import ProductFilter from '../components/ProductFilter';
 import { orderBy } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
     const [result, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
+    const navigate = useNavigate();
     const defaultValues = {
         gender: [],
         category: "All",
@@ -32,9 +33,10 @@ function HomePage() {
     const blogs = [
         {
             id: 1,
-            image: "https://example.com/images/blog1.jpg",
-            title: "Tất tần tật những sự thật hay ho thú vị về thai nhi 6 tuần tuổi",
-            description: "Discover interesting facts about a 6-week-old fetus."
+            image: "https://cdn1.concung.com/img/news/2024/07/2785-1721024942-cover.webp",
+            title: "Bà bầu uống sữa tươi thay sữa bầu được không? Loại nào tốt hơn?",
+            description: "Sữa bầu cung cấp nhiều dưỡng chất cần thiết cho mẹ bầu và thai nhi, song không phải mẹ bầu nào cũng có thể uống được. Vì vậy, mẹ bầu chọn sữa tươi để thay thế sữa bầu. Vậy bà bầu uống sữa tươi thay sữa bầu được không? Loại nào tốt hơn? Hãy cùng Con Cưng tìm hiểu câu trả lời trong bài viết dưới đây nhé!",
+            route: "/article1"
         },
         {
             id: 2,
@@ -61,7 +63,7 @@ function HomePage() {
                     }
                 });
                 // Ensure res.data is an array
-                setProducts(res.data.result);
+                setProducts(res.data.result.filter(product => product.visibilityStatus !== false));
                 setError("");
 
             } catch (error) {
@@ -155,6 +157,7 @@ function HomePage() {
                             {blogs.map((blog) => (
                                 <Grid item xs={12} sm={6} md={4} key={blog.id}>
                                     <BlogCard
+                                        route={blog.route}
                                         image={blog.image}
                                         title={blog.title}
                                         description={blog.description}

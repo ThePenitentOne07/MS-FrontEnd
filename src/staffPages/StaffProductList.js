@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -20,6 +20,10 @@ import {
 import apiService from "../app/apiService";
 import ProductDetails from "./ProductDetails";
 import ProductForm from "./ProductForm";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import { ToastProvider } from "../contexts/ToastContext";
+import dayjs from "dayjs";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -47,25 +51,69 @@ export default function ProductList() {
     return category ? category.categoryName : "Unknown";
   };
 
-  const fetchData = async () => {
+  const fetchProducts = async () => {
     try {
-      const productsResponse = await apiService.get("/api/products", {
+      const response = await apiService.get("/api/products", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      const categoriesResponse = await apiService.get(
-        "/api/products/list-category",
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      setProducts(productsResponse.data.result);
-      setCategories(categoriesResponse.data.result);
+      return response.data.result;
     } catch (error) {
       console.error("Error fetching products:", error);
+      throw error; // Re-throw the error for handling in fetchData
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await apiService.get("/api/products/list-category", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      return response.data.result;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      throw error; // Re-throw the error for handling in fetchData
+    }
+  };
+
+  // const disableExpiredProducts = async (products) => {
+  //   const updatedProducts = [];
+  //   for (const product of products) {
+  //     if (dayjs().isAfter(product.expiDate) && product.visibilityStatus) {
+  //       try {
+  //         await apiService.patch(
+  //           `/api/products/disable/${product.productID}`,
+  //           {},
+  //           {
+  //             headers: {
+  //               Authorization: "Bearer " + localStorage.getItem("token"),
+  //             },
+  //           }
+  //         );
+  //         updatedProducts.push(product);
+  //       } catch (error) {
+  //         console.error("Error disabling product:", error);
+  //         // You may want to handle specific errors here
+  //       }
+  //     } else {
+  //       updatedProducts.push(product);
+  //     }
+  //   }
+  //   return updatedProducts;
+  // };
+  const fetchData = async () => {
+    try {
+      const products = await fetchProducts();
+      const categories = await fetchCategories();
+      // const updatedProducts = await disableExpiredProducts(products);
+      setProducts(products);
+      setCategories(categories);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle errors here (e.g., display error message to user)
     }
   };
 
@@ -117,7 +165,7 @@ export default function ProductList() {
     if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
       setOpen(false);
       setSelectedProduct(null);
-      setSelectedForm(null); // Reset selected form on close
+      setSelectedForm(null);
       fetchData();
     }
   };
@@ -133,6 +181,11 @@ export default function ProductList() {
     setSelectedForm("productForm");
   };
 
+  // const showToast = (message, type = "success") => {
+  //   // Use showToast from context
+  //   showToast(message, type); // Call showToast with both arguments
+  // };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -141,8 +194,8 @@ export default function ProductList() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            mt: 2,
-            mb: 4,
+            alignItems: "center",
+            mb: 2,
           }}
         >
           <Typography
@@ -249,7 +302,7 @@ export default function ProductList() {
                   onClick={() => requestSort("productID")}
                   sx={{ cursor: "pointer", fontWeight: "bold" }}
                 >
-                  ID{" "}
+                  ID{""}
                   {sortConfig.key === "productID" &&
                     (sortConfig.direction === "ascending" ? "↑" : "↓")}
                 </TableCell>
@@ -296,7 +349,14 @@ export default function ProductList() {
                 <TableRow
                   sx={{
                     cursor: "pointer",
-                    "&:hover": { backgroundColor: "#f5f5f5" },
+                    backgroundColor: product.visibilityStatus
+                      ? "inherit"
+                      : "#F0BCBC",
+                    "&:hover": {
+                      backgroundColor: product.visibilityStatus
+                        ? "#f5f5f5"
+                        : "#e0e0e0",
+                    },
                   }}
                   key={product.productID}
                   onClick={() => handleRowClick(product)}
@@ -321,7 +381,7 @@ export default function ProductList() {
           </Table>
         </TableContainer>
       </Container>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
         {selectedForm === "productDetails" && (
           <ProductDetails
             product={selectedProduct}
