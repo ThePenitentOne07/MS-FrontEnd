@@ -24,7 +24,7 @@ const statusMapping = {
   PAID: 'Paid',
   IN_DELIVERY: 'In Delivery',
   CANNOT_DELIVER: 'Can not deliver',
-  CANNOT_CONFIRM: 'Can not confirm',
+  CANNOT_CONFRIRM: 'Can not confirm',
   COMPLETE_EXCHANGE: 'Complete',
 
 };
@@ -33,7 +33,7 @@ const statusColorMapping = {
   PAID: '#32CD32', // Yellow
   IN_DELIVERY: '#1E90FF', // Blue
   CANNOT_DELIVER: '#FF4500', // Red
-  CANNOT_CONFIRM: '#FF4500', // Red
+  CANNOT_CONFRIRM: '#FF4500', // Red
 };
 
 const OrderListStaff = () => {
@@ -256,10 +256,11 @@ const OrderListStaff = () => {
                 <Typography>Time : {orderDetail.failureReasonNote.split(';')[1].split('|')[1].split('T')[1].split('.')[0]}</Typography>
               </>
             )}
-            {orderDetail.orderStatus === 'CANNOT_CONFIRM' && (
+            {orderDetail.orderStatus === 'CANNOT_CONFRIRM' && (
               <>
-                <Typography>Failure Reason: {orderDetail.failureReasonNote}</Typography>
-
+                <Typography>Failure Reason: {orderDetail.failureReasonNote.split('|')[0]}</Typography>
+                <Typography>Date: {orderDetail.failureReasonNote.split('|')[1].split('T')[0]}</Typography>
+                <Typography>Time: {orderDetail.failureReasonNote.split('|')[1].split('T')[1].split('.')[0]}</Typography>
               </>
             )}
             <StyledTableCell>
@@ -302,6 +303,11 @@ const OrderListStaff = () => {
               </>
             )}
             {selectedOrderStatus.orderStatus === 'CANNOT_DELIVER' && (
+              <>
+                <Button onClick={handleAcceptDelay} color="primary">Accept</Button>
+              </>
+            )}
+            {selectedOrderStatus.orderStatus === 'CANNOT_CONFRIRM' && (
               <>
                 <Button onClick={handleAcceptDelay} color="primary">Accept</Button>
               </>

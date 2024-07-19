@@ -43,6 +43,7 @@ const OrderList = () => {
         'Đang xác nhận': 'PAID',
         'Đang giao': 'IN_DELIVERY',
         'Tạm hoãn': 'CANNOT_DELIVER',
+        "Chưa chấp nhận": 'CANNOT_CONFIRM'
 
     };
 

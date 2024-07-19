@@ -79,6 +79,7 @@ function DetailPage() {
     //     }
     // }, [product]);
 
+
     const handleImageClick = (image) => {
         setCurrentImage(image);
     };
@@ -185,11 +186,12 @@ function DetailPage() {
                         ) : (
                             <>
                                 {product && (
-                                    <Card>
-                                        <Grid container>
-                                            <Grid item xs={12} md={6}>
-                                                <Box p={2}>
-                                                    {/* <Box
+                                    <>
+                                        <Card>
+                                            <Grid container>
+                                                <Grid item xs={12} md={6}>
+                                                    <Box p={2}>
+                                                        {/* <Box
                                                         sx={{
                                                             borderRadius: 2,
                                                             overflow: "hidden",
@@ -207,9 +209,9 @@ function DetailPage() {
                                                             alt="product"
                                                         />
                                                     </Box> */}
-                                                    {/* <Stack direction="row" spacing={2} mt={2} justifyContent="center"> */}
-                                                    {/* {product.images && product.images.slice(0, 3).map((image, index) => ( */}
-                                                    {/* <Box
+                                                        {/* <Stack direction="row" spacing={2} mt={2} justifyContent="center"> */}
+                                                        {/* {product.images && product.images.slice(0, 3).map((image, index) => ( */}
+                                                        {/* <Box
                                                             key={index}
                                                             component="img"
                                                             src={image}
@@ -223,47 +225,47 @@ function DetailPage() {
                                                             }}
                                                             onClick={() => handleImageClick(image)}
                                                         /> */}
-                                                    {/* ))} */}
-                                                    {/* </Stack> */}
-                                                    <Box
+                                                        {/* ))} */}
+                                                        {/* </Stack> */}
+                                                        <Box
+                                                            sx={{
+                                                                borderRadius: 2,
+                                                                overflow: "hidden",
+                                                                display: "flex",
+                                                            }}
+                                                        >
+                                                            <Box
+                                                                component="img"
+                                                                sx={{
+                                                                    width: 1,
+                                                                    height: 1,
+                                                                }}
+                                                                src={product.productImage}
+                                                                alt="product"
+                                                            />
+                                                        </Box>
+                                                    </Box>
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <Typography
+                                                        variant="h6"
                                                         sx={{
-                                                            borderRadius: 2,
-                                                            overflow: "hidden",
-                                                            display: "flex",
+                                                            mt: 2,
+                                                            mb: 1,
+                                                            display: "block",
+                                                            textTransform: "uppercase",
+                                                            color:
+                                                                product.status === "sale"
+                                                                    ? "error.main"
+                                                                    : "info.main",
                                                         }}
                                                     >
-                                                        <Box
-                                                            component="img"
-                                                            sx={{
-                                                                width: 1,
-                                                                height: 1,
-                                                            }}
-                                                            src={product.productImage}
-                                                            alt="product"
-                                                        />
-                                                    </Box>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
-                                                        mt: 2,
-                                                        mb: 1,
-                                                        display: "block",
-                                                        textTransform: "uppercase",
-                                                        color:
-                                                            product.status === "sale"
-                                                                ? "error.main"
-                                                                : "info.main",
-                                                    }}
-                                                >
-                                                    In Stock: {product.quantity}
-                                                </Typography>
-                                                <Typography variant="h5" paragraph>
-                                                    {product.productName}
-                                                </Typography>
-                                                {/* <Stack
+                                                        In Stock: {product.quantity}
+                                                    </Typography>
+                                                    <Typography variant="h5" paragraph>
+                                                        {product.productName}
+                                                    </Typography>
+                                                    {/* <Stack
                                                     direction="row"
                                                     alignItems="center"
                                                     spacing={1}
@@ -281,8 +283,8 @@ function DetailPage() {
                                                         ({product.totalReview} reviews)
                                                     </Typography>
                                                 </Stack> */}
-                                                <Typography variant="h4" sx={{ mb: 3 }}>
-                                                    {/* <Box
+                                                    <Typography variant="h4" sx={{ mb: 3 }}>
+                                                        {/* <Box
                                                         component="span"
                                                         sx={{
                                                             color: "text.disabled",
@@ -291,49 +293,61 @@ function DetailPage() {
                                                     >
                                                         {product.priceSale}
                                                     </Box> */}
-                                                    &nbsp;{product.price}
-                                                    {/* VND */}
-                                                </Typography>
+                                                        &nbsp;{product.price}
+                                                        VND
+                                                    </Typography>
 
-                                                <Divider sx={{ borderStyle: "dashed" }} />
-                                                <Box>
-                                                    <ReactMarkdown
-                                                        // rehypePlugins={[rehypeRaw]}
-                                                        children={product.productDescription}
-                                                    />
-                                                </Box>
+                                                    <Divider sx={{ borderStyle: "dashed" }} />
+                                                    <Typography
+                                                        variant="h6"
 
-                                                <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 3 }}>
-                                                    <IconButton onClick={handleDecreaseQuantity}>
-                                                        <Remove />
-                                                    </IconButton>
-                                                    <TextField
-                                                        type="number"
-                                                        value={quantity}
-                                                        onChange={handleQuantityChange}
-                                                        onKeyDown={handleKeyDown}
-                                                        inputProps={{
-                                                            min: 1,
-                                                            max: 999,
-                                                            style: { textAlign: 'center' },
-                                                        }}
-                                                        sx={{ width: 60 }}
-                                                    />
-                                                    <IconButton onClick={handleIncreaseQuantity}>
-                                                        <Add />
-                                                    </IconButton>
-                                                </Stack>
-                                                <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-                                                    <Button variant="contained" color="primary" onClick={handleAddToCart}>
-                                                        Add to Cart
-                                                    </Button>
-                                                    <Button variant="contained" color="secondary" onClick={handleBuyNow}>
-                                                        Buy Now
-                                                    </Button>
-                                                </Stack>
+                                                    >
+                                                        Ngày sản xuất: {product.manuDate}
+                                                    </Typography>
+
+                                                    <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 3 }}>
+                                                        <IconButton onClick={handleDecreaseQuantity}>
+                                                            <Remove />
+                                                        </IconButton>
+                                                        <TextField
+                                                            type="number"
+                                                            value={quantity}
+                                                            onChange={handleQuantityChange}
+                                                            onKeyDown={handleKeyDown}
+                                                            inputProps={{
+                                                                min: 1,
+                                                                max: 999,
+                                                                style: { textAlign: 'center' },
+                                                            }}
+                                                            sx={{ width: 60 }}
+                                                        />
+                                                        <IconButton onClick={handleIncreaseQuantity}>
+                                                            <Add />
+                                                        </IconButton>
+                                                    </Stack>
+                                                    <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+                                                        <Button variant="contained" color="primary" onClick={handleAddToCart}>
+                                                            Add to Cart
+                                                        </Button>
+                                                        <Button variant="contained" color="secondary" onClick={handleBuyNow}>
+                                                            Buy Now
+                                                        </Button>
+                                                    </Stack>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </Card>
+                                        </Card>
+                                        <Card sx={{ marginTop: "50px" }}>
+                                            <Box sx={{ marginLeft: "50px" }}>
+                                                <Typography variant="h5" paragraph>
+                                                    Mô tả sản phẩm
+                                                </Typography>
+                                                <ReactMarkdown
+                                                    // rehypePlugins={[rehypeRaw]}
+                                                    children={product.productDescription}
+                                                />
+                                            </Box>
+                                        </Card>
+                                    </>
                                 )}
                                 {!product && (
                                     <Typography variant="h6">404 Product not found</Typography>

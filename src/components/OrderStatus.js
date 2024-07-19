@@ -13,10 +13,12 @@ const OrderStatus = () => {
         "PAID": 0,
         "IN_DELIVERY": 1,
         "CANNOT_DELIVER": 1,
+        "CANNOT_CONFRIRM": 1,
         "COMPLETE_EXCHANGE": 2
     };
     const customStepLabels = {
-        "CANNOT_DELIVER": ["Đang xác nhận", "Tạm hoãn", "Giao hàng thành công"]
+        "CANNOT_DELIVER": ["Đang xác nhận", "Tạm hoãn", "Giao hàng thành công"],
+        "CANNOT_CONFRIRM": ["Đang xác nhận", "Chưa chấp nhận", "Giao hàng thành công"]
     };
     useEffect(() => {
         if (orderId) {
@@ -78,7 +80,8 @@ const OrderStatus = () => {
         "PAID": "Đang xác nhận",
         "IN_DELIVERY": "Đang giao",
         "CANNOT_DELIVER": "Tạm hoãn",
-        "COMPLETE_EXCHANGE": "Giao hàng thành công"
+        "COMPLETE_EXCHANGE": "Giao hàng thành công",
+        "CANNOT_CONFRIRM": "Chưa chấp nhận"
     };
 
 
@@ -109,9 +112,30 @@ const OrderStatus = () => {
                     <Typography variant="h6">Tình trạng: <b>{displayedStatus}</b></Typography>
                     <Typography variant="h6">Địa chỉ: <b>{order.shippingAddress}</b></Typography>
                     {order.orderStatus === "CANNOT_DELIVER" && (
-                        <Typography variant="h6" sx={{ color: 'red' }}>
-                            Lý do tạm hoãn: <b>{order.failureReasonNote}</b>
-                        </Typography>
+                        <>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Lý do tạm hoãn: <b>{order.failureReasonNote.split(';')[1].split('|')[0]}</b>
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Ngày: <b>{order.failureReasonNote.split(';')[1].split('|')[1].split('T')[0]}</b>
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Giờ: <b>{order.failureReasonNote.split(';')[1].split('|')[1].split('T')[1].split('.')[0]}</b>
+                            </Typography>
+                        </>
+                    )}
+                    {order.orderStatus === "CANNOT_CONFRIRM" && (
+                        <>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Lý do tạm hoãn: <b>{order.failureReasonNote.split('|')[0]}</b>
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Ngày: <b>{order.failureReasonNote.split('|')[1].split('T')[0]}</b>
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: 'red' }}>
+                                Giờ: <b>{order.failureReasonNote.split('|')[1].split('T')[1].split('.')[0]}</b>
+                            </Typography>
+                        </>
                     )}
                     <Box sx={{ mt: 3 }}>
                         <Typography variant="h6">Sản phẩm:</Typography>
