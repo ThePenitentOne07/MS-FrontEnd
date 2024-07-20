@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
+import { useEffect } from 'react';
 
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
@@ -71,6 +72,16 @@ export default function AddressForm({ district, setDistrict }) {
     setTelNo(value);
     setTelNoError(!/^\d{10,11}$/.test(value));
   };
+  // useEffect(() => {
+  //   isError(
+  //     fullName.trim() === '' ||
+  //     address.trim() === '' ||
+  //     !/^\d{10,11}$/.test(telNo) ||
+  //     district === ''
+  //   );
+
+  // }, [fullName, address, telNo, district, isError]);
+
 
   return (
     <Grid container spacing={3}>

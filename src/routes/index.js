@@ -41,6 +41,7 @@ import EditorComponent from "../staffPages/EditorComponent";
 import SearchPage from "../pages/SearchPage";
 import CategoryPage from "../pages/CategoryPage";
 import Article from "../pages/Article";
+import RefundPage from "../pages/RefundPage";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -74,6 +75,7 @@ function Router() {
             <Route path="search/:searchTerm" element={<SearchPage />} />
             <Route path="category/:variant" element={<CategoryPage />} />
             <Route path="/article1" element={<Article />} />
+            <Route path="/refund" element={<RefundPage />} />
           </Route>
           <Route element={<BlankLayout />}>
             <Route path="/login" element={<Login />} />
@@ -82,6 +84,7 @@ function Router() {
             <Route path="*" element={<Error />} />
             <Route path="/error" element={<Error />} />
             <Route path="/fill" element={<FinnishRegistration />} />
+
             {/* <Route path="/fill-oauth2" element={<FinishGoogleRegistration />} /> */}
             {/* <Route path="/oauth2-google" element={<GoogleLoginStatus />} /> */}
             <Route path="/otp" element={<OTP />} />

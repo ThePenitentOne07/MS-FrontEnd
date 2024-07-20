@@ -28,6 +28,8 @@ import Review from '../components/checkout/Review';
 import apiService from '../app/apiService';
 import { useState } from 'react';
 
+
+
 const steps = ['Thông tin người dùng', 'Thông tin đơn hàng'];
 
 const logoStyle = {
@@ -46,6 +48,7 @@ function getStepContent(step, district, setDistrict, orderId) {
     default:
       throw new Error('Unknown step');
   }
+
 }
 
 export default function Checkout() {
@@ -145,7 +148,7 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  console.log(totalPrice)
+
   return (
     <ThemeProvider theme={showCustomTheme ? checkoutTheme : defaultTheme}>
 
