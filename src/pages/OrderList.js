@@ -22,7 +22,7 @@ const OrderList = () => {
                         "Authorization": "Bearer " + token
                     }
                 });
-                setOrders(response.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE'));
+                setOrders(response.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE' && order.orderStatus !== 'IS_FEEDBACK'));
                 setError(null);
             } catch (err) {
                 setError('Failed to fetch orders');
@@ -43,11 +43,11 @@ const OrderList = () => {
         'Đang xác nhận': 'PAID',
         'Đang giao': 'IN_DELIVERY',
         'Tạm hoãn': 'CANNOT_DELIVER',
-        "Chưa chấp nhận": 'CANNOT_CONFIRM'
+        "Chưa chấp nhận": 'CANNOT_CONFRIRM'
 
     };
 
-    const tabLabels = ['Tất cả', 'Đang xác nhận', 'Tạm hoãn', 'Đang giao'];
+    const tabLabels = ['Tất cả', 'Đang xác nhận', 'Tạm hoãn', 'Đang giao', 'Chưa chấp nhận'];
 
     const filterOrders = (statusLabel) => {
         if (statusLabel === 'Tất cả') {

@@ -23,7 +23,7 @@ const PurchaseHistory = () => {
                         "Authorization": "Bearer " + token
                     }
                 });
-                setOrders(response.data.result.filter(order => order.orderStatus === 'COMPLETE_EXCHANGE'));
+                setOrders(response.data.result.filter(order => (order.orderStatus === 'COMPLETE_EXCHANGE' || order.orderStatus === 'IS_FEEDBACK')));
                 setError(null);
             } catch (err) {
                 setError('Failed to fetch orders');

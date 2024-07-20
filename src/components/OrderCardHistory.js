@@ -19,11 +19,12 @@ const OrderCardHistory = ({ order }) => {
         IN_DELIVERY: 'In Delivery',
         CANNOT_DELIVER: 'Delay',
         COMPLETE_EXCHANGE: 'Complete',
+        IS_FEEDBACK: 'Đã đánh giá'
     };
 
     const statusColorMapping = {
         COMPLETE_EXCHANGE: '#32CD32', // Green
-        IN_DELIVERY: '#1E90FF', // Blue
+        IS_FEEDBACK: '#1E90FF', // Blue
         CANNOT_DELIVER: '#FF4500', // Red
     };
 
