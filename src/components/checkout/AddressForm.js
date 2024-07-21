@@ -36,11 +36,7 @@ const districts = [
   'Quận Tân Bình',
   'Quận Tân Phú',
   'Quận Thủ Đức',
-  'Huyện Bình Chánh',
-  'Huyện Cần Giờ',
-  'Huyện Củ Chi',
-  'Huyện Hóc Môn',
-  'Huyện Nhà Bè',
+
 ];
 
 export default function AddressForm({ district, setDistrict }) {

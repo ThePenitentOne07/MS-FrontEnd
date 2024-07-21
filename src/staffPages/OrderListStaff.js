@@ -40,6 +40,7 @@ const OrderListStaff = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [denyReason, setDenyReason] = useState('');
   const [isDenyFormOpen, setIsDenyFormOpen] = useState(false);
+  const [isDelayFormOpen, setIsDelayFormOpen] = useState(false);
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState('');
   const [orderDetail, setOrderDetail] = useState([]);
@@ -70,6 +71,7 @@ const OrderListStaff = () => {
     setSelectedOrder(null);
     setSelectedOrderStatus(null);
     setIsDenyFormOpen(false);
+    setIsDelayFormOpen(false);
     setDenyReason('');
     getOrders();
   };
@@ -130,6 +132,27 @@ const OrderListStaff = () => {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+  const handleDelaySubmit = async () => {
+    if (!denyReason) {
+      alert("Reason must not be empty")
+      return;
+    }
+    try {
+      await apiService.put(`api/orders/delay-order/${selectedOrder}?reason=${denyReason}`, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      alert("Order delayed");
+      handleClose();
+    } catch (error) {
+      console.error("Error denying order:", error);
+    }
+  };
+
+  const handleDelay = () => {
+    setIsDelayFormOpen(true);
+  }
 
   const handleComplete = async () => {
     const formData = new FormData();
@@ -299,7 +322,7 @@ const OrderListStaff = () => {
               <>
                 <input onChange={handleFileChange} type="file" id="file" accept="image/*" />
                 <Button onClick={handleComplete} color="primary">Order Complete</Button>
-                <Button onClick={handleDeny} color="secondary">Delay</Button>
+                <Button onClick={handleDelay} color="secondary">Delay</Button>
               </>
             )}
             {selectedOrderStatus.orderStatus === 'CANNOT_DELIVER' && (
@@ -334,6 +357,27 @@ const OrderListStaff = () => {
         <DialogActions>
           <Button onClick={handleCancelDeny} color="primary">Cancel</Button>
           <Button onClick={handleDenySubmit} color="secondary">Submit</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={isDelayFormOpen}
+        onClose={handleClose}
+        maxWidth="lg"
+      >
+        <DialogTitle>Reason for Denial</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Reason"
+            fullWidth
+            value={denyReason}
+            onChange={(e) => setDenyReason(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDeny} color="primary">Cancel</Button>
+          <Button onClick={handleDelaySubmit} color="secondary">Submit</Button>
         </DialogActions>
       </Dialog>
     </Container>

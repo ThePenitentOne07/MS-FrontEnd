@@ -31,7 +31,7 @@ const UserInfoCard = () => {
                     <ListItem button component={RouterLink} to="/password">
                         <ListItemText primary="Đổi mật khẩu" />
                     </ListItem>
-                    <ListItem button component={RouterLink} to="/password">
+                    <ListItem button component={RouterLink} to="/refund">
                         <ListItemText primary="Hoàn trả hàng" />
                     </ListItem>
                 </List>

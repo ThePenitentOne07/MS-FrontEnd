@@ -119,7 +119,7 @@ const EditCustomerAccount = () => {
                                 label="Số điện thoại"
                                 name="phoneNumber"
                                 type="tel" // su dung regex de check so dien thoai
-                                // defaultValue={formValues.phoneNumber}
+                                defaultValue={formValues.phoneNumber}
                                 onChange={handleInputChange}
                                 helperText="Phone number is required"
                                 sx={{ mt: 2 }}

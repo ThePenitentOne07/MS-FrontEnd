@@ -42,6 +42,8 @@ import SearchPage from "../pages/SearchPage";
 import CategoryPage from "../pages/CategoryPage";
 import Article from "../pages/Article";
 import RefundPage from "../pages/RefundPage";
+import ListRefundPage from "../pages/ListRefundPage";
+import RefundRequest from "../staffPages/RefundRequest";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -76,6 +78,8 @@ function Router() {
             <Route path="category/:variant" element={<CategoryPage />} />
             <Route path="/article1" element={<Article />} />
             <Route path="/refund" element={<RefundPage />} />
+            <Route path="/refundList/:orderId" element={<ListRefundPage />} />
+
           </Route>
           <Route element={<BlankLayout />}>
             <Route path="/login" element={<Login />} />
@@ -133,6 +137,7 @@ function Router() {
             <Route path="post" element={<PostStaff />} />
             <Route path="order" element={<OrderListStaff />} />
             <Route path="newPost" element={<EditorComponent />} />
+            <Route path="refundReq" element={<RefundRequest />} />
           </Route>
         </Routes>
       </FormContext2>

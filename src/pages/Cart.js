@@ -213,7 +213,7 @@ const CartPage = () => {
             <Typography variant="h4" gutterBottom>
                 Giỏ hàng
             </Typography>
-            {cartItems.length === 0 ? (
+            {cartItems.length === 0 || !cartItems ? (
                 <Typography variant="h6">Your cart is empty</Typography>
             ) : (
                 <Grid container spacing={2}>

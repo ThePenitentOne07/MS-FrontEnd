@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     Box,
     Typography,
@@ -28,6 +28,7 @@ const OrderStatus = () => {
     const [open, setOpen] = useState(false);
     const [rating, setRating] = useState(0);
     const [description, setDescription] = useState('');
+    const navigate = useNavigate();
 
     const steps = ["Đang xác nhận", "Đang giao", "Giao hàng thành công"];
     const params = useParams();
@@ -93,6 +94,9 @@ const OrderStatus = () => {
         setDescription('');
         setOpen(false);
     };
+    const handleRefundSubmit = () => {
+        navigate(`/refundList/${orderId}`)
+    }
 
     const handleSubmitRating = async () => {
         const token = localStorage.getItem("token");
@@ -187,7 +191,14 @@ const OrderStatus = () => {
                                 color="primary"
                                 onClick={handleClickOpen}
                                 sx={{ mt: 3 }}
+
                             >Đánh giá dịch vụ</Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={handleRefundSubmit}
+                                sx={{ mt: 3, marginLeft: 3 }}
+                            >Yêu cầu hoàn trả</Button>
                             <Dialog open={open} onClose={handleClose}>
                                 <DialogTitle>Đánh giá dịch vụ</DialogTitle>
                                 <DialogContent>
@@ -239,9 +250,9 @@ const OrderStatus = () => {
 
                             <Button
                                 variant="contained"
-                                color="primary"
-                                // onClick={handleClickOpen}
-                                sx={{ mt: 3, marginLeft: 3, bgcolor: "red" }}
+                                color="secondary"
+                                onClick={handleRefundSubmit}
+                                sx={{ mt: 3, marginLeft: 3 }}
                             >Yêu cầu hoàn trả</Button>
                             <Dialog open={open} onClose={handleClose}>
                                 <DialogTitle>Đánh giá dịch vụ</DialogTitle>

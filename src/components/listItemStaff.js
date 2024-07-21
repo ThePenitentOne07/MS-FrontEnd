@@ -20,13 +20,13 @@ export const mainListItems = (
   <React.Fragment>
     <ListItemButton component={NavLink} to="/staff/product" activeClassName="active">
       <ListItemIcon>
-        <Inventory2Icon/>
+        <Inventory2Icon />
       </ListItemIcon>
       <ListItemText primary="Product" />
     </ListItemButton>
     <ListItemButton component={NavLink} to="/staff/post" activeClassName="active">
       <ListItemIcon>
-        <DynamicFeedIcon/>
+        <DynamicFeedIcon />
       </ListItemIcon>
       <ListItemText primary="Post" />
     </ListItemButton>
@@ -44,12 +44,18 @@ export const mainListItems = (
     </ListItemButton>
     <ListItemButton component={NavLink} to="/staff/customer" activeClassName="active">
       <ListItemIcon>
-        <PeopleIcon/>
+        <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Customer" />
     </ListItemButton>
-    
-      
+    <ListItemButton component={NavLink} to="/staff/customer" activeClassName="active">
+      <ListItemIcon>
+        <PeopleIcon />
+      </ListItemIcon>
+      <ListItemText primary="Order History" />
+    </ListItemButton>
+
+
   </React.Fragment>
 );
 

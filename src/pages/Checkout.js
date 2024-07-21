@@ -27,6 +27,7 @@ import InfoMobile from '../components/checkout/InfoMobile';
 import Review from '../components/checkout/Review';
 import apiService from '../app/apiService';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 
 
@@ -58,9 +59,10 @@ export default function Checkout() {
   const checkoutTheme = createTheme(getCheckoutTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
   const [activeStep, setActiveStep] = React.useState(0);
-  const [totalPrice, setTotalPrice] = React.useState(0.00);
+  const [totalPrice, setTotalPrice] = React.useState(0);
   const [cartId, setCartId] = React.useState("");
   const [orderId, setOrderId] = React.useState("");
+  const [error, setError] = useState("")
 
   const handleNext = async () => {
     if (activeStep === steps.length - 2) {
@@ -111,6 +113,8 @@ export default function Checkout() {
         }
 
       } catch (error) {
+        toast.error(error.message)
+
         console.error('Error placing order:', error);
       }
     } else {
@@ -125,7 +129,7 @@ export default function Checkout() {
       try {
         const responsePayment = await apiService.post(
           `/api/payment/pay/${orderId}`,
-          { amount: amount * 10000 }, // Ensure amount is a long integer
+          { amount: amount }, // Ensure amount is a long integer
           {
             headers: {
               'Authorization': 'Bearer ' + token

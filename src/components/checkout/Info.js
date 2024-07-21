@@ -42,7 +42,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
           setCartId(response.data.result[0].cartId); // Save cart ID
 
           const total = items.reduce((acc, item) => acc + parseFloat(item.price * item.quantity), 0);
-          setTotalPrice(total.toFixed(2));
+          setTotalPrice(total);
         } else {
           setError('No items in cart');
         }

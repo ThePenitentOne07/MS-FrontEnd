@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Typography, Button } from '@mui/material';
+import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import UserInfoCard from '../components/UserInfoCard';
 import apiService from '../app/apiService';
 // import OrderCard from '../components/OrderCard';
 import OrderCardHistory from '../components/OrderCardHistory';
+import OrderRefundCardList from '../components/OrderRefundCardList';
 
 const RefundPage = () => {
     const [loading, setLoading] = useState(false);
@@ -18,15 +19,15 @@ const RefundPage = () => {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                const response = await apiService.get(`/api/orders/user/${userId}`, {
+                const response = await apiService.get(`/api/refund/${userId}`, {
                     headers: {
                         "Authorization": "Bearer " + token
                     }
                 });
-                setOrders(response.data.result.filter(order => (order.orderStatus === 'COMPLETE_EXCHANGE' || order.orderStatus === 'IS_FEEDBACK')));
+                setOrders(response.data.result);
                 setError(null);
             } catch (err) {
-                setError('Failed to fetch orders');
+                setError(err.message);
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -37,6 +38,27 @@ const RefundPage = () => {
             fetchOrders();
         }
     }, []);
+    // useEffect(() => {
+    //     // Fixed data for testing
+    //     const fixedOrders = [
+    //         {
+    //             productId: '1',
+    //             customerImage: 'https://via.placeholder.com/150',
+    //             productName: 'Product 1',
+    //         },
+    //         {
+    //             productId: '2',
+    //             customerImage: 'https://via.placeholder.com/150',
+    //             productName: 'Product 2',
+    //         },
+    //         {
+    //             productId: '3',
+    //             customerImage: 'https://via.placeholder.com/150',
+    //             productName: 'Product 3',
+    //         },
+    //     ];
+    //     setOrders(fixedOrders);
+    // }, []);
 
     return (
         <Container>
@@ -46,19 +68,21 @@ const RefundPage = () => {
                 <Box sx={{ flex: 2 }}>
 
                     <Typography variant="h4" gutterBottom>
-                        Đơn hàng đã hoàn thành
+                        Hoàn trả hàng
                     </Typography>
                     {loading ? (
                         <Typography>Loading...</Typography>
                     ) : error ? (
-                        <Typography color="error">{error}</Typography>
+                        <Typography >{error}</Typography>
                     ) : (
                         orders.length > 0 ? (
                             orders.map((order) => (
-                                <OrderCardHistory key={order.id} order={order} />
+                                <Grid item xs={12} md={8} key={order.productId}>
+                                    <OrderRefundCardList item={order} />
+                                </Grid>
                             ))
                         ) : (
-                            <Typography>Không có đơn hàng đã hoàn thành.</Typography>
+                            <Typography>Không có yêu cầu hoàn trả nào.</Typography>
                         )
                     )}
                 </Box>
