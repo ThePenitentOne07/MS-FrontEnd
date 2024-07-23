@@ -22,7 +22,7 @@ const ChangePassword = () => {
         };
         try {
             await apiService.put('/account/password-update', data, { headers });
-            setSuccess('Account updated successfully');
+            setSuccess('Đã đổi mật khẩu thành công');
             setError(null);
         } catch (err) {
             console.error('Update Error:', err); // Debug log
@@ -51,7 +51,7 @@ const ChangePassword = () => {
                                     name="oldPassword"
                                     label="Mật khẩu hiện tại"
                                     variant="outlined"
-                                    validationRules={{ required: 'Password must not be empty' }}
+                                    validationRules={{ required: 'Mật khẩu không được để trống' }}
                                     sx={{ mb: 2 }}  // Add margin bottom
                                 />
                                 <FTextField
@@ -60,12 +60,12 @@ const ChangePassword = () => {
                                     type="password"
                                     variant="outlined"
                                     validationRules={{
-                                        required: 'Password must not be empty',
+                                        required: 'Mật khẩu không được để trống',
                                         validate: (value, allValues) => value !== allValues.oldPassword || 'Mật khẩu mới không được trùng với mật khẩu củ'
                                     }}
                                     sx={{ mb: 2 }}  // Add margin bottom
                                 />
-                                {/* <FTextField
+                                <FTextField
                                     name="confirmPassword"
                                     label="Xác nhận mật khẩu"
                                     type="password"
@@ -76,7 +76,7 @@ const ChangePassword = () => {
                                             value === methods.watch('newPassword') || 'Passwords do not match',
                                     }}
                                     sx={{ mb: 2 }}  // Add margin bottom
-                                /> */}
+                                />
                                 <Button
                                     variant="contained"
                                     color="primary"

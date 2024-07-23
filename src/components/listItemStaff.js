@@ -15,6 +15,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import SendIcon from '@mui/icons-material/Send';
 
 export const mainListItems = (
   <React.Fragment>
@@ -48,11 +49,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Customer" />
     </ListItemButton>
-    <ListItemButton component={NavLink} to="/staff/customer" activeClassName="active">
+    <ListItemButton component={NavLink} to="/staff/refundReq" activeClassName="active">
       <ListItemIcon>
-        <PeopleIcon />
+        <SendIcon />
       </ListItemIcon>
-      <ListItemText primary="Order History" />
+      <ListItemText primary="Refund request" />
     </ListItemButton>
 
 

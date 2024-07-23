@@ -18,7 +18,7 @@ const OrderCardHistory = ({ order }) => {
         PAID: 'Paid',
         IN_DELIVERY: 'In Delivery',
         CANNOT_DELIVER: 'Delay',
-        COMPLETE_EXCHANGE: 'Complete',
+        COMPLETE_EXCHANGE: 'Đã hoàn thành',
         IS_FEEDBACK: 'Đã đánh giá'
     };
 

@@ -44,7 +44,7 @@ const PurchaseHistory = () => {
                 <UserInfoCard name="Nguyen Dinh Bao" />
                 <Box sx={{ flex: 2 }}>
                     <Typography variant="h4" gutterBottom>
-                        Đơn hàng đã hoàn thành
+                        Lịch sử đơn hàng
                     </Typography>
                     {loading ? (
                         <Typography>Loading...</Typography>

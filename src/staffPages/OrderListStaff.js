@@ -182,7 +182,7 @@ const OrderListStaff = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-      setOrders(res.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE'));
+      setOrders(res.data.result.filter(order => order.orderStatus !== 'IN_CART' && order.orderStatus !== 'COMPLETE_EXCHANGE' && order.orderStatus !== 'IS_FEEDBACK'));
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -220,7 +220,7 @@ const OrderListStaff = () => {
               <MenuItem value="IN_DELIVERY">In delivery</MenuItem>
               <MenuItem value="CANNOT_DELIVER">Delayed</MenuItem>
 
-              <MenuItem value="COMPLETE_EXCHANGE">Complete</MenuItem>
+              <MenuItem value="CANNOT_CONFIRM">Can't confirm</MenuItem>
             </Select>
           </FormControl>
         </Stack>

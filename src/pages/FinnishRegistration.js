@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller } from 'react-hook-form';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Alert } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useNavigate, useParams } from "react-router-dom";
@@ -85,6 +85,9 @@ function FinishRegistration() {
           <Typography variant="h4" component="h1" gutterBottom>
             Hoàn thành đăng ký
           </Typography>
+          {!!errors.responseError && (
+            <Alert severity="error" sx={{ mb: 2 }}>{errors.responseError.message}</Alert>
+          )}
           <Controller
             name="emailAddress"
             control={control}

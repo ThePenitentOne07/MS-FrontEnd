@@ -34,6 +34,9 @@ const UserInfoCard = () => {
                     <ListItem button component={RouterLink} to="/refund">
                         <ListItemText primary="Hoàn trả hàng" />
                     </ListItem>
+                    <ListItem button component={RouterLink} to="/address">
+                        <ListItemText primary="Quản lí địa chỉ giao hàng" />
+                    </ListItem>
                 </List>
             </Card>
         </Box>

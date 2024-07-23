@@ -44,6 +44,7 @@ import Article from "../pages/Article";
 import RefundPage from "../pages/RefundPage";
 import ListRefundPage from "../pages/ListRefundPage";
 import RefundRequest from "../staffPages/RefundRequest";
+import AddressManagement from "../pages/AddressManagement";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -79,6 +80,9 @@ function Router() {
             <Route path="/article1" element={<Article />} />
             <Route path="/refund" element={<RefundPage />} />
             <Route path="/refundList/:orderId" element={<ListRefundPage />} />
+            <Route path="/refundStatus/:refundId" element={<ListRefundPage />} />
+            <Route path="/address" element={<AddressManagement />} />
+
 
           </Route>
           <Route element={<BlankLayout />}>

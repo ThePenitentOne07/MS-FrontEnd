@@ -37,7 +37,7 @@ function ProductCard({ product }) {
                         {/* </Typography>
                         )} */}
                         <Typography variant="subtitle1">
-                            {/* {fCurrency(product.price)} */} {product.price}
+                            {/* {fCurrency(product.price)} */} {product.price}VND
                         </Typography>
                     </Stack>
                 </CardContent>

@@ -95,6 +95,7 @@ export default function PrimarySearchAppBar() {
 
     const handleMyAcc = () => {
         navigate("/editAcc");
+        handleMenuClose();
     };
 
     const handleProfileMenuOpen = (event) => {

@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import apiService from '../app/apiService';
 
-const OrderStatus = () => {
+const RefundStatus = () => {
     const { orderId } = useParams();
     const [order, setOrder] = useState();
     const [open, setOpen] = useState(false);
@@ -303,4 +303,4 @@ const OrderStatus = () => {
     );
 };
 
-export default OrderStatus;
+export default RefundStatus;

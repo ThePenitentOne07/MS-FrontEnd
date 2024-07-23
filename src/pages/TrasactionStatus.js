@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Stack, Typography, Button } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import apiService from '../app/apiService';
 
 function TransactionStatus() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-
+    const navigate = useNavigate();
     const amount = params.get('vnp_Amount');
     const bankCode = params.get('vnp_BankCode');
     const bankTranNo = params.get('vnp_BankTranNo');
@@ -30,7 +30,9 @@ function TransactionStatus() {
         txnRef,
         responseCode,
     };
-
+    const handleButton = () => {
+        navigate(`/orderstatus/${txnRef}`)
+    }
     useEffect(() => {
         const token = localStorage.getItem('token');
         const sendReq = async () => {
@@ -69,6 +71,7 @@ function TransactionStatus() {
                 </Typography>
                 <Button
                     variant="contained"
+                    onClick={handleButton}
                     sx={{
                         alignSelf: 'start',
                         width: { xs: '100%', sm: 'auto' },

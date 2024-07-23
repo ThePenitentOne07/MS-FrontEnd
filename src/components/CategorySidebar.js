@@ -7,19 +7,19 @@ import { useNavigate } from 'react-router-dom';
 
 const categories = [
     {
-        name: 'ORGANIC MILK',
+        name: 'SỮA ORGANIC',
         subcategories: [],
         icon: <OpacityIcon />,
         route: "/category/1"
     },
     {
-        name: 'FLAVORED MILK',
+        name: 'SỮA HƯƠNG VỊ',
         subcategories: [],
         icon: <OpacityIcon />,
         route: "/category/2"
     },
     {
-        name: 'DAIRY ALTERNATIVES',
+        name: 'SẢN PHẨM THAY THẾ SỮA',
         subcategories: [],
         icon: <OpacityIcon />,
         route: "/category/3"

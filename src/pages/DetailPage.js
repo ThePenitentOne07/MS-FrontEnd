@@ -2,7 +2,7 @@
 
 // export default DetailPage;
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, CircularProgress, Alert, Card, Divider, Grid, Stack, Rating, Container, Breadcrumbs, Link, Button, IconButton, TextField } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -21,6 +21,7 @@ function DetailPage() {
     const [currentImage, setCurrentImage] = useState("");
     const params = useParams();
     const [quantity, setQuantity] = useState(1);
+    const navigate = useNavigate();
     // useEffect(() => {
     //     const getProducts = async () => {
     //         setLoading(true);
@@ -138,6 +139,46 @@ function DetailPage() {
             // Optionally, handle errors, e.g., show error message to the user
         }
     };
+    const handleBuyNow = async () => {
+        // Retrieve the user object from local storage
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+
+        // Check if the user object exists and get the id
+        if (!savedUser || !savedUser.id) {
+            console.error('User ID not found in local storage');
+            return;
+        }
+
+        const userId = savedUser.id;
+
+        const productToAdd = {
+
+            product_id: product.productID,
+            quantity: quantity
+        };
+
+        // Retrieve the token from local storage
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error('Token not found in local storage');
+            return;
+        }
+
+        try {
+            const response = await apiService.post(`api/carts/${userId}/items`, productToAdd, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            navigate('/checkout')
+            // Optionally, trigger any follow-up actions like notifications or updating UI
+        } catch (error) {
+            console.error('Failed to add product to cart:', error);
+            toast.error("Sản phẩm chưa được thêm vào")
+            // Optionally, handle errors, e.g., show error message to the user
+        }
+    };
     const handleKeyDown = (event) => {
         if (event.key === '-' || event.key === 'e' || event.key === '.') {
             event.preventDefault();
@@ -146,11 +187,7 @@ function DetailPage() {
 
 
 
-    const handleBuyNow = () => {
-        // Logic for buying now
 
-        console.log("Buy now:", { product, quantity });
-    };
 
     if (loading) {
         return (

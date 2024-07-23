@@ -2,7 +2,7 @@ import { Container, Typography, styled, Stack, Select, MenuItem, TableBody, Form
 import React, { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import apiService from '../app/apiService';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     maxHeight: 600, // Set a height for the table container
@@ -17,17 +17,23 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const statusMapping = {
     IN_PROGRESSING: 'In progress',
-    IN_DELIVERY: 'In Delivery',
+    TAKING_PRODUCT_PROGRESSING: 'On way to get product',
     CANNOT_DELIVER: 'Can not deliver',
-    CANNOT_CONFRIRM: 'Can not confirm',
+    CANNOT_CONFIRM_REQUEST: 'Can not confirm',
     COMPLETE_EXCHANGE: 'Complete',
+    CONFIRM_TAKING: "Product retrieved",
+    SHOP_PROCESS: "Processing",
+    CONFIRM_REFUND_MONEY: "Refund accepted"
 };
 
 const statusColorMapping = {
-    PAID: '#32CD32', // Yellow
-    IN_DELIVERY: '#1E90FF', // Blue
+    CONFIRM_TAKING: '#32CD32', // Yellow
+    TAKING_PRODUCT_PROGRESSING: '#1E90FF', // Blue
     CANNOT_DELIVER: '#FF4500', // Red
-    CANNOT_CONFRIRM: '#FF4500', // Red
+    CANNOT_CONFIRM_REQUEST: '#FF4500', // Red
+    IN_PROGRESSING: '#FFB233',
+    SHOP_PROCESS: '#FFB233',
+    CONFIRM_REFUND_MONEY: '#32CD32',
 };
 
 const RefundRequest = () => {
@@ -36,9 +42,8 @@ const RefundRequest = () => {
     const [filterStatus, setFilterStatus] = useState('');
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [denyReason, setDenyReason] = useState('');
-    const [isCancel1FormOpen, setIsCancel1FormOpen] = useState(false);
-    const [orderDetail, setOrderDetail] = useState([]);
-    const [productDetail, setProductDetail] = useState([]);
+    const [isCancelFormOpen, setIsCancelFormOpen] = useState(false);
+    const [isReasonFormOpen, setIsReasonFormOpen] = useState(false);
     const [selectedOrderStatus, setSelectedOrderStatus] = useState(null);
     const [file, setFile] = useState('');
 
@@ -53,7 +58,7 @@ const RefundRequest = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setOrders(res.data.result);
+            setOrders(res.data.result.filter(order => order.refundStatus !== 'CANCEL_REFUND_REQUEST'));
         } catch (error) {
             console.error("Error fetching orders:", error);
         }
@@ -65,15 +70,20 @@ const RefundRequest = () => {
 
     };
     const handleCancel1 = () => {
-        setIsCancel1FormOpen(true);
+        setIsCancelFormOpen(true);
+    }
+    const handleStaffNote = () => {
+        setIsReasonFormOpen(true);
     }
 
     const handleClose = () => {
         setSelectedOrder(null);
         setSelectedOrderStatus(null);
-        setIsCancel1FormOpen(false);
+        setIsReasonFormOpen(false)
+        setIsCancelFormOpen(false);
         setDenyReason('');
         getOrders();
+        setFile('');
     };
     const handleSubmitCancel1 = async () => {
         if (!denyReason) {
@@ -81,7 +91,7 @@ const RefundRequest = () => {
             return;
         }
         try {
-            await apiService.patch(`/api/refund/${selectedOrder.id}/cancel?reason=${denyReason}`, {}, {
+            await apiService.patch(`/api/refund/${selectedOrder.id}/deny1?cancelReason1=${denyReason}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -108,6 +118,82 @@ const RefundRequest = () => {
     const handleFilterChange = (event) => {
         setFilterStatus(event.target.value);
     };
+    const handelProductRetrieve = async () => {
+        const formData = new FormData();
+        formData.append('refundEvidence', file)
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/completeTaking`,
+                formData,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    }
+                }
+            )
+            handleClose();
+        } catch {
+
+        }
+    }
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+    const handleAcceptConFirmTaking = async () => {
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/shopProcess`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+
+                }
+            })
+            handleClose();
+            toast.success("Product recieved")
+        } catch {
+
+        }
+    }
+    const handleAcceptRefund = async () => {
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/refundMoney?staffNote=${denyReason}`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+
+                }
+            })
+            handleClose();
+
+        } catch {
+
+        }
+    }
+    const handleSubmitCancel2 = async () => {
+        const formData = new FormData();
+        formData.append('denyImage', file)
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/deny2?staffRejectReason=${denyReason}`, formData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+
+                }
+            })
+            handleClose();
+
+        } catch {
+
+        }
+    }
+    const handleReturn = async () => {
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/turnBack`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+
+                }
+            })
+            handleClose();
+        }
+        catch { }
+    }
 
     const filteredOrders = filterStatus ? orders.filter(order => order.orderStatus === filterStatus) : orders;
 
@@ -165,9 +251,9 @@ const RefundRequest = () => {
                                 <TableCell>{order.requestTime}</TableCell>
                                 <TableCell>
                                     <Chip
-                                        label={statusMapping[order.orderStatus]}
+                                        label={statusMapping[order.refundStatus]}
                                         style={{
-                                            backgroundColor: statusColorMapping[order.orderStatus],
+                                            backgroundColor: statusColorMapping[order.refundStatus],
                                             color: 'white'
                                         }}
                                     />
@@ -185,13 +271,30 @@ const RefundRequest = () => {
                         <Typography>Customer Name: {selectedOrder.senderName}</Typography>
                         <Typography>Phone Number: {selectedOrder.senderPhone}</Typography>
                         <Typography>Address: {selectedOrder.senderAddress}</Typography>
-                        <CardMedia
-                            component="img"
-                            height="500"
+                        <Typography>Reason: {selectedOrder.customerRefundReason}</Typography>
+                        <Typography>Note: {selectedOrder.customerNote}</Typography>
 
-                            image={selectedOrder.customerImage}
-                            alt="Order Image"
-                        />
+                        {selectedOrder.refundStatus !== 'CONFIRM_TAKING' && (
+                            <CardMedia
+                                component="img"
+                                height="500"
+
+                                image={selectedOrder.customerImage}
+                                alt="Order Image"
+                            />
+                        )}
+                        {selectedOrder.refundStatus === 'CONFIRM_TAKING' && (
+                            <>
+                                <Typography>Product image:</Typography>
+                                <CardMedia
+                                    component="img"
+                                    height="500"
+
+                                    image={selectedOrder.staffReceivedImage}
+                                    alt="Order Image"
+                                />
+                            </>
+                        )}
                         {/* {orderDetail.orderStatus === 'CANNOT_DELIVER' && (
                             <>
                                 <Typography>Failure Reason: {orderDetail.failureReasonNote.split(';')[1].split('|')[0]}</Typography>
@@ -199,9 +302,9 @@ const RefundRequest = () => {
                                 <Typography>Time : {orderDetail.failureReasonNote.split(';')[1].split('|')[1].split('T')[1].split('.')[0]}</Typography>
                             </>
                         )}
-                        {orderDetail.orderStatus === 'CANNOT_CONFRIRM' && (
+                        {orderDetail.orderStatus === 'CANNOT_CONFIRM_REQUEST' && (
                             <>
-                                <Typography>Failure Reason: {orderDetail.failureReasonNote.split('|')[0]}</Typography>
+                                <Typography>Failure Reason: {selectedOrder.}</Typography>
                                 <Typography>Date: {orderDetail.failureReasonNote.split('|')[1].split('T')[0]}</Typography>
                                 <Typography>Time: {orderDetail.failureReasonNote.split('|')[1].split('T')[1].split('.')[0]}</Typography>
                             </>
@@ -214,6 +317,46 @@ const RefundRequest = () => {
                             <>
                                 <Button onClick={handleAcceptInProgress} color="primary">Accept</Button>
                                 <Button onClick={handleCancel1} color="secondary">Cancel</Button>
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'TAKING_PRODUCT_PROGRESSING' && (
+                            <>
+                                <Button variant="contained" component="label">
+                                    Tải lên hình ảnh (*)
+                                    <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+                                </Button>
+                                <Button onClick={handelProductRetrieve} color="primary">Product retrieved</Button>
+                                {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'CANNOT_CONFIRM_REQUEST' && (
+                            <>
+
+                                <Button onClick={handleAcceptInProgress} color="primary">Accept</Button>
+                                {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
+
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'CONFIRM_TAKING' && (
+                            <>
+
+                                <Button onClick={handleAcceptConFirmTaking} color="primary">Accept</Button>
+                                {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
+
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'SHOP_PROCESS' && (
+                            <>
+                                <Button onClick={handleStaffNote} color="primary">Accept refund</Button>
+                                <Button onClick={handleCancel1} color="secondary">Deny</Button>
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'CONFIRM_REFUND_MONEY' && (
+                            <>
+
+                                <Button onClick={handleReturn} color="primary">Refund</Button>
+                                {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
+
                             </>
                         )}
                         {/* {selectedOrderStatus.orderStatus === 'IN_DELIVERY' && (
@@ -236,22 +379,58 @@ const RefundRequest = () => {
                     </DialogActions>
                 </Dialog>
             )}
-            <Dialog open={isCancel1FormOpen} onClose={handleClose} maxWidth="lg">
-                <DialogTitle>Reason for Denial</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        value={denyReason}
-                        onChange={(e) => setDenyReason(e.target.value)}
-                        label="Reason"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={handleSubmitCancel1} color="secondary">Deny</Button>
-                </DialogActions>
-            </Dialog>
+            {selectedOrder && (
+                <>
+                    <Dialog open={isCancelFormOpen} onClose={handleClose} maxWidth="lg">
+                        <DialogTitle>Reason for Denial</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                value={denyReason}
+                                onChange={(e) => setDenyReason(e.target.value)}
+                                label="Reason"
+                                fullWidth
+                            />
+                        </DialogContent>
+                        {selectedOrder.refundStatus === 'IN_PROGRESSING' && (
+                            <DialogActions>
+                                <Button onClick={handleClose} color="primary">Cancel</Button>
+                                <Button onClick={handleSubmitCancel1} color="secondary">Deny</Button>
+                            </DialogActions>
+                        )}
+                        {selectedOrder.refundStatus === 'SHOP_PROCESS' && (
+                            <DialogActions>
+                                <Button variant="contained" component="label">
+                                    Tải lên hình ảnh (*)
+                                    <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+                                </Button>
+                                <Button onClick={handleClose} color="primary">Cancel</Button>
+                                <Button onClick={handleSubmitCancel2} color="secondary">Deny</Button>
+                            </DialogActions>
+                        )}
+
+
+                    </Dialog>
+                    <Dialog open={isReasonFormOpen} onClose={handleClose} maxWidth="lg">
+                        <DialogTitle>Staff note</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                value={denyReason}
+                                onChange={(e) => setDenyReason(e.target.value)}
+                                label="Reason"
+                                fullWidth
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">Cancel</Button>
+                            <Button onClick={handleAcceptRefund} color="secondary">Submit</Button>
+                        </DialogActions>
+                    </Dialog>
+                </>
+            )}
+
+
         </Container>
+
     );
 };
 
