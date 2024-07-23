@@ -1,30 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, List, ListItem, ListItemText, Collapse, styled } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import OpacityIcon from '@mui/icons-material/Opacity';
 import { useNavigate } from 'react-router-dom';
+import apiService from '../app/apiService';
 
 
-const categories = [
-    {
-        name: 'SỮA ORGANIC',
-        subcategories: [],
-        icon: <OpacityIcon />,
-        route: "/category/1"
-    },
-    {
-        name: 'SỮA HƯƠNG VỊ',
-        subcategories: [],
-        icon: <OpacityIcon />,
-        route: "/category/2"
-    },
-    {
-        name: 'SẢN PHẨM THAY THẾ SỮA',
-        subcategories: [],
-        icon: <OpacityIcon />,
-        route: "/category/3"
-    },
-];
+// const categories = [
+//     {
+//         name: 'SỮA ORGANIC',
+//         subcategories: [],
+//         icon: <OpacityIcon />,
+//         route: "/category/1"
+//     },
+//     {
+//         name: 'SỮA HƯƠNG VỊ',
+//         subcategories: [],
+//         icon: <OpacityIcon />,
+//         route: "/category/2"
+//     },
+//     {
+//         name: 'SẢN PHẨM THAY THẾ SỮA',
+//         subcategories: [],
+//         icon: <OpacityIcon />,
+//         route: "/category/3"
+//     },
+// ];
 
 const SidebarContainer = styled('div')(({ theme }) => ({
     width: '250px',
@@ -51,10 +52,26 @@ const CategoryIcon = styled('div')(({ theme }) => ({
 
 function CategorySidebar() {
     const [open, setOpen] = React.useState({});
+    const [categories, setCategories] = useState([])
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const getCategory = async () => {
+            try {
+                const res = await apiService.get("api/products/list-category", {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                setCategories(res.data.result);
+            } catch {
 
+            }
+        }
+        getCategory();
+    }, [])
     const handleClick = (category) => {
-        navigate(category.route)
+        navigate(`category/${category.id}`)
     };
 
     return (
@@ -63,23 +80,13 @@ function CategorySidebar() {
                 <SidebarContainer>
                     <List component="nav">
                         {categories.map((category) => (
-                            <div key={category.name}>
+                            <div key={category.id}>
                                 <CategoryItem button onClick={() => handleClick(category)}>
-                                    <CategoryIcon>{category.icon}</CategoryIcon>
-                                    <ListItemText primary={category.name} />
-                                    {category.subcategories.length > 0 && (open[category.name] ? <ExpandLess /> : <ExpandMore />)}
+                                    {/* <CategoryIcon>{category.icon}</CategoryIcon> */}
+                                    <ListItemText primary={category.categoryName} />
+                                    {/* {category.subcategories.length > 0 && (open[category.name] ? <ExpandLess /> : <ExpandMore />)} */}
                                 </CategoryItem>
-                                {category.subcategories.length > 0 && (
-                                    <Collapse in={open[category.name]} timeout="auto" unmountOnExit>
-                                        <List component="div" disablePadding>
-                                            {category.subcategories.map((subcategory) => (
-                                                <ListItem key={subcategory} button sx={{ pl: 4 }}>
-                                                    <ListItemText primary={subcategory} />
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                    </Collapse>
-                                )}
+
                             </div>
                         ))}
                     </List>

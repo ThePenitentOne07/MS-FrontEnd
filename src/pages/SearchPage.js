@@ -109,7 +109,7 @@ function SearchPage() {
     );
 }
 function applyFilter(result, filters) {
-    const { sortBy } = filters;
+
     let filteredProducts = result;
     if (filters.priceRange) {
         filteredProducts = result.filter((product) => {

@@ -48,6 +48,7 @@ import AddressManagement from "../pages/AddressManagement";
 import ScrollToTop from "../components/ScrollToTop";
 import Article2 from "../pages/Article2";
 import Article3 from "../pages/Article3";
+import CategoryManagement from "../staffPages/CategoryManagement";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -148,6 +149,8 @@ function Router() {
             <Route path="order" element={<OrderListStaff />} />
             <Route path="newPost" element={<EditorComponent />} />
             <Route path="refundReq" element={<RefundRequest />} />
+            <Route path="category" element={<CategoryManagement />} />
+
           </Route>
         </Routes>
       </FormContext2>

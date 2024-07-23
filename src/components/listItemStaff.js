@@ -25,11 +25,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Product" />
     </ListItemButton>
-    <ListItemButton component={NavLink} to="/staff/post" activeClassName="active">
+    <ListItemButton component={NavLink} to="/staff/category" activeClassName="active">
       <ListItemIcon>
         <DynamicFeedIcon />
       </ListItemIcon>
-      <ListItemText primary="Post" />
+      <ListItemText primary="Category" />
     </ListItemButton>
     <ListItemButton component={NavLink} to="/staff/voucher" activeClassName="active">
       <ListItemIcon>

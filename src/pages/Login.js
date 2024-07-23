@@ -50,7 +50,7 @@ function Login() {
                 if (user.role === ("SELLER") || user.role === ("PRODUCT_STAFF") || user.role === ("POST_STAFF")) {
                     navigate("/staff/order", { replace: true });
                 } else {
-                    navigate(from, { replace: true });
+                    navigate("/");
                 }
                 // navigate(from, { replace: true });
             }

@@ -23,7 +23,8 @@ const statusMapping = {
     COMPLETE_EXCHANGE: 'Complete',
     CONFIRM_TAKING: "Product retrieved",
     SHOP_PROCESS: "Processing",
-    CONFIRM_REFUND_MONEY: "Refund accepted"
+    CONFIRM_REFUND_MONEY: "Refund accepted",
+    DELIVERY_TO_TURN_BACK: "On way to return product"
 };
 
 const statusColorMapping = {
@@ -34,6 +35,7 @@ const statusColorMapping = {
     IN_PROGRESSING: '#FFB233',
     SHOP_PROCESS: '#FFB233',
     CONFIRM_REFUND_MONEY: '#32CD32',
+    DELIVERY_TO_TURN_BACK: '#1E90FF'
 };
 
 const RefundRequest = () => {
@@ -194,6 +196,20 @@ const RefundRequest = () => {
         }
         catch { }
     }
+    const handleReturnComplete = async () => {
+        const formData = new FormData();
+        formData.append('denyImage', file)
+        try {
+            await apiService.patch(`api/refund/${selectedOrder.id}/completeDelivery`, FormData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+
+                }
+            })
+        } catch {
+
+        }
+    }
 
     const filteredOrders = filterStatus ? orders.filter(order => order.orderStatus === filterStatus) : orders;
 
@@ -351,10 +367,22 @@ const RefundRequest = () => {
                                 <Button onClick={handleCancel1} color="secondary">Deny</Button>
                             </>
                         )}
-                        {selectedOrder.refundStatus === 'CONFIRM_REFUND_MONEY' && (
+                        {selectedOrder.refundStatus === 'CANNOT_ACCEPT_REFUND_REQUEST' && (
                             <>
 
-                                <Button onClick={handleReturn} color="primary">Refund</Button>
+                                <Button onClick={handleReturn} color="primary">Return</Button>
+                                {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
+
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === "DELIVERY_TO_TURN_BACK" && (
+                            <>
+
+                                <Button variant="contained" component="label">
+                                    Tải lên hình ảnh (*)
+                                    <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+                                </Button>
+                                <Button onClick={handleReturnComplete} color="primary">Return</Button>
                                 {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
 
                             </>

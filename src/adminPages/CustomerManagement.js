@@ -98,7 +98,7 @@ function CustomerManagement() {
   const confirmBanCustomer = async (customer) => {
     const token = localStorage.getItem("token");
     try {
-      await apiService.put(`/users/members/ban/${customer.emailAddress}`, {
+      await apiService.put(`/users/members/ban/${customer.emailAddress}`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/x-www-form-urlencoded",
@@ -115,7 +115,7 @@ function CustomerManagement() {
   const confirmUnbanCustomer = async (customer) => {
     const token = localStorage.getItem("token");
     try {
-      await apiService.put(`/users/members/unban/${customer.emailAddress}`, {
+      await apiService.put(`/users/members/unban/${customer.emailAddress}`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/x-www-form-urlencoded",
