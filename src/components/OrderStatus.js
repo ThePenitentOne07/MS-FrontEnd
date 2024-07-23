@@ -21,6 +21,7 @@ import {
     Rating
 } from '@mui/material';
 import apiService from '../app/apiService';
+import { formatCurrency } from '../app/util';
 
 const OrderStatus = () => {
     const { orderId } = useParams();
@@ -171,7 +172,7 @@ const OrderStatus = () => {
                                 <ListItem key={product.id}>
                                     <ListItemText
                                         primary={`${product.productName} (x${product.quantity})`}
-                                        secondary={`Giá: $${product.price.toFixed(2)}`}
+                                        secondary={`Giá: ${formatCurrency(product.price)} VND`}
                                     />
                                 </ListItem>
                             ))}

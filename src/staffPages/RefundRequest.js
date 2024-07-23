@@ -24,7 +24,8 @@ const statusMapping = {
     CONFIRM_TAKING: "Product retrieved",
     SHOP_PROCESS: "Processing",
     CONFIRM_REFUND_MONEY: "Refund accepted",
-    DELIVERY_TO_TURN_BACK: "On way to return product"
+    DELIVERY_TO_TURN_BACK: "On way to return product",
+    COMPLETE_TURN_BACK: "Product returned"
 };
 
 const statusColorMapping = {
@@ -35,7 +36,9 @@ const statusColorMapping = {
     IN_PROGRESSING: '#FFB233',
     SHOP_PROCESS: '#FFB233',
     CONFIRM_REFUND_MONEY: '#32CD32',
-    DELIVERY_TO_TURN_BACK: '#1E90FF'
+    DELIVERY_TO_TURN_BACK: '#1E90FF',
+    COMPLETE_TURN_BACK: '#32CD32'
+
 };
 
 const RefundRequest = () => {
@@ -198,14 +201,16 @@ const RefundRequest = () => {
     }
     const handleReturnComplete = async () => {
         const formData = new FormData();
-        formData.append('denyImage', file)
+        formData.append('imgShip', file)
         try {
-            await apiService.patch(`api/refund/${selectedOrder.id}/completeDelivery`, FormData, {
+            await apiService.patch(`api/refund/${selectedOrder.id}/completeDelivery`, formData, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
 
                 }
+
             })
+            handleClose();
         } catch {
 
         }

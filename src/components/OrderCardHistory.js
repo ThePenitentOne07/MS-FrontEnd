@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, Typography, Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../app/util';
 
 
 const OrderCardHistory = ({ order }) => {
@@ -35,10 +36,15 @@ const OrderCardHistory = ({ order }) => {
                     Mã đơn hàng: {order.id}
                 </Typography>
                 <Typography component="div">
-                    Tổng tiền: ${order.totalPrice}
+                    Tổng tiền: {formatCurrency(order.totalPrice)} VND
                 </Typography>
                 <Typography component="div">
-                    Đặt hàng vào: {order.orderDate}
+                    Đặt hàng vào: {order.orderDate.split("T")[0]}
+
+                </Typography>
+                <Typography component="div">
+                    Thời gian: {order.orderDate.split("T")[1]}
+
                 </Typography>
                 {order.orderStatus && (
                     <Chip

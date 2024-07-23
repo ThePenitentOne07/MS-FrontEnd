@@ -14,10 +14,11 @@ import { useNavigate } from 'react-router-dom';
 export default function OrderRefundCardList({ item, onChoose, handleDecreaseQuantity, handleIncreaseQuantity, handleQuantityChange, handleRemoveItem, handleKeyDown }) {
     const navigate = useNavigate();
     return (
-        <Card onClick={() => navigate(`/`)} key={item.productId}
+        <Card onClick={() => navigate(`/refundStatus/${item.id}`)} key={item.id}
             sx={{
                 display: 'flex',
                 mb: 2,
+                maxHeight: 151,
                 border: '2px solid #cb8bcd',
                 cursor: 'pointer',
                 transition: 'transform 0.2s, box-shadow 0.2s',

@@ -49,6 +49,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import Article2 from "../pages/Article2";
 import Article3 from "../pages/Article3";
 import CategoryManagement from "../staffPages/CategoryManagement";
+import RefundStatus from "../pages/RefundStatus";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -87,7 +88,7 @@ function Router() {
             <Route path="/article3" element={<Article3 />} />
             <Route path="/refund" element={<RefundPage />} />
             <Route path="/refundList/:orderId" element={<ListRefundPage />} />
-            <Route path="/refundStatus/:refundId" element={<ListRefundPage />} />
+            <Route path="/refundStatus/:refundId" element={<RefundStatus />} />
             <Route path="/address" element={<AddressManagement />} />
 
 
