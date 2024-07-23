@@ -40,15 +40,17 @@ function HomePage() {
         },
         {
             id: 2,
-            image: "https://example.com/images/blog2.jpg",
-            title: "3 cách rèn cho trẻ sơ sinh tự ngủ mà mẹ cần biết",
-            description: "Learn three effective methods to help newborns sleep on their own."
+            image: "https://cdn1.concung.com/img/news/2024/07/2784-1720672712-cover.webp",
+            title: "Top 10 sữa tốt cho bà bầu 3 tháng đầu được tin dùng hiện nay",
+            description: "Theo lời khuyên của các chuyên gia, mẹ bầu nên uống sữa bầu càng sớm càng tốt. Đặc biệt, 3 tháng đầu được xem là thời điểm vàng để sử dụng sữa bầu, bởi sữa bầu chứa nhiều dưỡng chất tốt cho sự hình thành và phát triển của thai nhi. Vậy bầu 3 tháng nên uống sữa gì? Hãy cùng tham khảo Top 10 sữa tốt cho bà bầu 3 tháng đầu do Con Cưng gợi ý sau đây nhé! ",
+            route: "/article2"
         },
         {
             id: 3,
-            image: "https://example.com/images/blog3.jpg",
-            title: "Top 4 loại đồ chơi cho bé 1 tuổi phát triển trí não ba mẹ nên mua ngay",
-            description: "Top 4 toys for 1-year-olds that parents should buy to boost brain development."
+            image: "https://cdn1.concung.com/img/news/2024/06/2773-1719286186-cover.webp",
+            title: "Top 5 sữa bầu Nhật Bản được nhiều mẹ bầu tin chọn hiện nay",
+            description: "Sữa bầu Nhật được rất nhiều ba mẹ quan tâm và lựa chọn bởi chất lượng tuyệt vời cùng quy trình sản xuất, tuyển chọn nguyên vật liệu nghiêm ngặt. Con Cưng sẽ gợi ý cho ba mẹ top 5 sữa bầu Nhật Bản được nhiều mẹ bầu tin chọn hiện nay. Ba mẹ tham khảo trong bài viết dưới đây nhé!",
+            route: "/article3"
         },
     ];
 

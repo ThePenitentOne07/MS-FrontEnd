@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 import apiService from '../../app/apiService';
 import { CircularProgress } from '@mui/material';
+import { formatCurrency } from '../../app/util';
 
 function Info({ totalPrice, setTotalPrice, setCartId }) {
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
         Total
       </Typography>
       <Typography variant="h4" gutterBottom>
-        ${totalPrice}
+        {formatCurrency(totalPrice)}VND
       </Typography>
       <List disablePadding>
         {cartItems.map((item) => (
@@ -89,7 +90,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
               }
             />
             <Typography variant="body1" fontWeight="medium">
-              {item.price}
+              {formatCurrency(item.price)}VND
             </Typography>
           </ListItem>
         ))}

@@ -24,6 +24,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { ToastProvider } from "../contexts/ToastContext";
 import dayjs from "dayjs";
+import { formatCurrency } from "../app/util";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -364,7 +365,7 @@ export default function ProductList() {
                   <TableCell align="left">{product.productID}</TableCell>
                   <TableCell align="left">{product.productName}</TableCell>
                   <TableCell align="left">{product.quantity}</TableCell>
-                  <TableCell align="left">{product.price}</TableCell>
+                  <TableCell align="left">{formatCurrency(product.price)}VND</TableCell>
                   <TableCell align="left">
                     {getCategoryName(product.categoryID)}
                   </TableCell>

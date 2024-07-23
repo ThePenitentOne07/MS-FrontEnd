@@ -60,25 +60,26 @@ function TransactionStatus() {
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                     {isSuccess ? (
-                        <>
-                            Your order number is
-                            <strong>&nbsp;#140396</strong>. We have emailed your order
-                            confirmation and will update you once it&apos;s shipped.
-                        </>
+                        <Stack>
+                            Mã đơn của bạn là:
+                            <strong>&nbsp;{txnRef}</strong>.
+                            <Button
+                                variant="contained"
+                                onClick={handleButton}
+                                sx={{
+                                    alignSelf: 'start',
+                                    width: { xs: '100%', sm: 'auto' },
+                                }}
+                            >
+                                Đi tới đơn của tôi
+                            </Button>
+                        </Stack>
                     ) : (
-                        'Your transaction could not be completed. Please try again or contact support.'
+                        ""
                     )}
                 </Typography>
-                <Button
-                    variant="contained"
-                    onClick={handleButton}
-                    sx={{
-                        alignSelf: 'start',
-                        width: { xs: '100%', sm: 'auto' },
-                    }}
-                >
-                    Go to my orders
-                </Button>
+
+
             </Stack>
         </>
     );

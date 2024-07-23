@@ -14,6 +14,7 @@ import {
 import { Add, Remove, Delete } from '@mui/icons-material';
 import apiService from '../app/apiService';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../app/util';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -205,7 +206,7 @@ const CartPage = () => {
     };
 
     const getTotalPrice = () => {
-        return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+        return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     };
 
     return (
@@ -232,7 +233,7 @@ const CartPage = () => {
                                             {item.productName}
                                         </Typography>
                                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                                            ${item.price} x {item.quantity} = ${(item.price * item.quantity).toFixed(2)}
+                                            {formatCurrency(item.price)}VND x {item.quantity} = {formatCurrency(item.price * item.quantity)}VND
                                         </Typography>
                                     </CardContent>
                                     <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
@@ -269,7 +270,7 @@ const CartPage = () => {
                             </Typography>
                             <Divider sx={{ mb: 2, color: '#cb8bcd' }} />
                             <Typography variant="subtitle1">Tổng sản phẩm: {cartItems.reduce((acc, item) => acc + item.quantity, 0)}</Typography>
-                            <Typography variant="subtitle1">Tổng tiền: ${getTotalPrice()}</Typography>
+                            <Typography variant="subtitle1">Tổng tiền: {formatCurrency(getTotalPrice())}VND</Typography>
                             <Button variant="contained" color="primary" onClick={handleProceedCheckout} fullWidth sx={{ mt: 2 }}>
                                 Thanh toán
                             </Button>

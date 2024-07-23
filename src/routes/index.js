@@ -45,6 +45,9 @@ import RefundPage from "../pages/RefundPage";
 import ListRefundPage from "../pages/ListRefundPage";
 import RefundRequest from "../staffPages/RefundRequest";
 import AddressManagement from "../pages/AddressManagement";
+import ScrollToTop from "../components/ScrollToTop";
+import Article2 from "../pages/Article2";
+import Article3 from "../pages/Article3";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -62,6 +65,7 @@ function Router() {
   return (
     <AuthProvider>
       <FormContext2>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
@@ -78,6 +82,8 @@ function Router() {
             <Route path="search/:searchTerm" element={<SearchPage />} />
             <Route path="category/:variant" element={<CategoryPage />} />
             <Route path="/article1" element={<Article />} />
+            <Route path="/article2" element={<Article2 />} />
+            <Route path="/article3" element={<Article3 />} />
             <Route path="/refund" element={<RefundPage />} />
             <Route path="/refundList/:orderId" element={<ListRefundPage />} />
             <Route path="/refundStatus/:refundId" element={<ListRefundPage />} />

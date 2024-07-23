@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 // import { fCurrency } from "../utils";//Hiện giá tiền theo đô
+import { formatCurrency } from "../app/util";
 
 function ProductCard({ product }) {
     const navigate = useNavigate();
@@ -37,7 +38,9 @@ function ProductCard({ product }) {
                         {/* </Typography>
                         )} */}
                         <Typography variant="subtitle1">
-                            {/* {fCurrency(product.price)} */} {product.price}VND
+                            {/* {fCurrency(product.price)} */}
+                            {/* {product.price}VND */}
+                            {formatCurrency(product.price)} VND
                         </Typography>
                     </Stack>
                 </CardContent>

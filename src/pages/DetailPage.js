@@ -12,6 +12,7 @@ import apiService from '../app/apiService';
 import LoadingScreen from '../components/LoadingScreen';
 // import ProductList from '../components/ProductList';
 import { toast } from 'react-toastify';
+import { formatCurrency } from '../app/util';
 function DetailPage() {
     const [product, setProduct] = useState(null);
     // const [result, setProducts] = useState([]);
@@ -180,7 +181,7 @@ function DetailPage() {
         }
     };
     const handleKeyDown = (event) => {
-        if (event.key === '-' || event.key === 'e' || event.key === '.') {
+        if (event.key === '-' || event.key === 'e' || event.key === '.' || event.key === '+') {
             event.preventDefault();
         }
     };
@@ -330,8 +331,8 @@ function DetailPage() {
                                                     >
                                                         {product.priceSale}
                                                     </Box> */}
-                                                        &nbsp;{product.price}
-                                                        VND
+                                                        &nbsp;{formatCurrency(product.price)} VND
+
                                                     </Typography>
 
                                                     <Divider sx={{ borderStyle: "dashed" }} />

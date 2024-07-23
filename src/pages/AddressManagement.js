@@ -19,7 +19,9 @@ const AddressManagement = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const userId = JSON.parse(localStorage.getItem("user")).id;
-    const [currentAddress, setCurrentAddress] = useState({});
+    const [currentAddress, setCurrentAddress] = useState({
+        userId: `${userId}`
+    });
     const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -117,7 +119,7 @@ const AddressManagement = () => {
             console.error("Error setting default address:", error);
         }
     };
-    console.log("Adrress:", currentAddress);
+    console.log(currentAddress);
     return (
         <Container>
             <Box sx={{ display: "flex", mt: 5 }}>

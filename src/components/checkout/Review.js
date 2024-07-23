@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import apiService from '../../app/apiService';
+import { formatCurrency } from '../../app/util';
 
 const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 const payments = [
@@ -50,9 +51,9 @@ export default function Review({ orderId }) {
       <List disablePadding>
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Tổng cộng" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            ${orderDetails.totalPrice}
+            {formatCurrency(orderDetails.totalPrice)}VND
           </Typography>
         </ListItem>
       </List>
@@ -65,7 +66,7 @@ export default function Review({ orderId }) {
       >
         <div>
           <Typography variant="subtitle2" gutterBottom>
-            Shipment details
+            Địa chỉ nhận hàng
           </Typography>
           <Typography gutterBottom>{orderDetails.receiverName}</Typography>
           <Typography color="text.secondary" gutterBottom>
