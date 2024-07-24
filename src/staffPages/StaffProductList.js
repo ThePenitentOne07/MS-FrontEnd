@@ -358,6 +358,11 @@ export default function ProductList() {
                         ? "#f5f5f5"
                         : "#e0e0e0",
                     },
+                    ...(dayjs(product.publishDate).isBefore(dayjs(), "day") &&
+                    product.manuDate === null &&
+                    product.expiDate === null
+                      ? { backgroundColor: "#1DE5E2" }
+                      : {}),
                   }}
                   key={product.productID}
                   onClick={() => handleRowClick(product)}
@@ -365,7 +370,9 @@ export default function ProductList() {
                   <TableCell align="left">{product.productID}</TableCell>
                   <TableCell align="left">{product.productName}</TableCell>
                   <TableCell align="left">{product.quantity}</TableCell>
-                  <TableCell align="left">{formatCurrency(product.price)}VND</TableCell>
+                  <TableCell align="left">
+                    {formatCurrency(product.price)}VND
+                  </TableCell>
                   <TableCell align="left">
                     {getCategoryName(product.categoryID)}
                   </TableCell>

@@ -15,6 +15,8 @@ import {
   TextField,
   InputLabel,
   styled,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import apiService from "../app/apiService";
 import { LoadingButton } from "@mui/lab";
@@ -32,8 +34,9 @@ const HelperTextTypography = styled(Typography)(({ theme }) => ({
 
 const StyledDatePicker = styled(DatePicker)(({ theme, error }) => ({
   "& .MuiInputBase-root": {
-    borderBottom: `1px solid ${error ? theme.palette.error.main : theme.palette.grey[500]
-      }`, // Set border color based on error state
+    borderBottom: `1px solid ${
+      error ? theme.palette.error.main : theme.palette.grey[500]
+    }`, // Set border color based on error state
     borderRadius: theme.shape.borderRadius,
     paddingBottom: theme.spacing(0.12), // Add some padding for label
     "& fieldset": {
@@ -60,10 +63,13 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
     expiDate: "",
     categoryID: "",
     productImage: "",
+    publishDate: "",
   });
   const [initialData, setInitialData] = useState({});
   const [isDirty, setIsDirty] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isUpcomingProduct, setIsUpcomingProduct] = useState(false);
+  const [isUpcomingStateLocked, setIsUpcomingStateLocked] = useState(false);
   const [errors, setErrors] = useState({
     productName: "",
     price: "",
@@ -71,6 +77,7 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
     productDescription: "",
     manuDate: "",
     expiDate: "",
+    publishDate: "",
   });
 
   useEffect(() => {
@@ -81,14 +88,29 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
         price: product.price,
         quantity: product.quantity,
         productDescription: product.productDescription,
-        manuDate: product.manuDate,
-        expiDate: product.expiDate,
+        manuDate: product.manuDate || "",
+        expiDate: product.expiDate || "",
         categoryID: product.categoryID,
         productImage: product.productImage,
+        publishDate: product.publishDate || "",
       };
       setFormData(initialValues);
       setInitialData(initialValues);
       setImagePreview(product.productImage);
+      setIsUpcomingProduct(
+        !!(
+          product.publishDate !== null &&
+          product.manuDate === null &&
+          product.expiDate === null
+        )
+      );
+      setIsUpcomingStateLocked(
+        !!(
+          product.publishDate !== null &&
+          product.manuDate !== null &&
+          product.expiDate !== null
+        )
+      );
     }
   }, [product]);
 
@@ -137,6 +159,7 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
       ...prevErrors,
       [fieldName]: errorMessage,
     }));
+    return errorMessage !== "";
   };
 
   const validateDate = (fieldName, value) => {
@@ -147,8 +170,11 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
     switch (fieldName) {
       case "manuDate":
         const manuDate = dayjs(value);
+        console.log(manuDate);
         errorMessage =
-          !manuDate.isValid() || manuDate.isAfter(currentDate)
+          !manuDate.isValid() ||
+          manuDate.isAfter(currentDate) ||
+          manuDate === ""
             ? "Ngày sản xuất không hợp lệ."
             : "";
         break;
@@ -156,12 +182,19 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
         const expiDate = dayjs(value);
         errorMessage =
           !expiDate.isValid() ||
-            expiDate.isBefore(currentDate, "day") ||
-            (formData.manuDate &&
-              dayjs(formData.manuDate).isValid() &&
-              expiDate.isBefore(dayjs(formData.manuDate), "day"))
+          expiDate.isBefore(currentDate, "day") ||
+          (formData.manuDate &&
+            dayjs(formData.manuDate).isValid() &&
+            expiDate.isBefore(dayjs(formData.manuDate), "day")) ||
+          expiDate === ""
             ? "Ngày hết hạn không hợp lệ."
             : "";
+        break;
+      case "publishDate":
+        const publishDate = dayjs(value);
+        errorMessage = !publishDate.isValid()
+          ? "Ngày mở bán không hợp lệ."
+          : "";
         break;
       default:
         break;
@@ -171,6 +204,7 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
       ...prevErrors,
       [fieldName]: errorMessage,
     }));
+    return errorMessage !== "";
   };
 
   const handleDateChange = (name, date) => {
@@ -184,6 +218,31 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
       return updatedData;
     });
     validateDate(name, date.format("YYYY-MM-DD"));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setIsUpcomingProduct(checked);
+    if (checked) {
+      setFormData((prevData) => ({
+        ...prevData,
+        publishDate: initialData.publishDate,
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        publishDate: "",
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        publishDate: initialData.publishDate,
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        publishDate: "",
+      }));
+    }
+    setIsDirty(!!isUpcomingProduct);
   };
 
   const handleImageChange = (e) => {
@@ -200,6 +259,46 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
   };
 
   const handleSubmit = async () => {
+    let isFieldError = false;
+    let isDateError = false;
+    for (const item in formData) {
+      if (validateField(item, formData[item])) isFieldError = true;
+    }
+    if (isUpcomingProduct) {
+      if (validateDate("publishDate", formData.publishDate)) isDateError = true;
+    } else {
+      if (
+        validateDate("manuDate", formData.manuDate) ||
+        validateDate("expiDate", formData.expiDate)
+      )
+        isDateError = true;
+    }
+    if (isFieldError) {
+      window.alert(
+        "Vui lòng kiểm tra lại các trường nhập và nhập đúng thông tin"
+      );
+      return;
+    }
+    if (isDateError) {
+      window.alert(
+        "Vui lòng không bỏ trống ngày sản xuất hoặc ngày hết hạn và nhập đúng định dạng"
+      );
+      return;
+    }
+    if (
+      initialData.publishDate &&
+      formData.manuDate &&
+      formData.expiDate &&
+      !initialData.manuDate &&
+      !initialData.expiDate
+    ) {
+      const upcomingLockConfirm = window.confirm(
+        "Sau khi đã chuyển sản phẩm thành sản phẩm đã mở bán, bạn không thể chuyển lại về trạng thái sắp mở bán. Xác nhận tiếp tục?"
+      );
+      if (!upcomingLockConfirm) {
+        return;
+      }
+    }
     try {
       const formDataToSend = new FormData();
       for (const key in formData) {
@@ -221,13 +320,6 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
           },
         }
       );
-      // toast.success("Cập nhật sản phẩm thành công!", {
-      //   position: "top-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   toastId: "updateProduct", // Unique ID to avoid duplicate toasts
-      // });
       onClose();
       window.alert("Cập nhật sản phẩm thành công!");
     } catch (error) {
@@ -306,11 +398,18 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
           Vui lòng cập nhật lại thông tin hoặc thay thế sản phẩm
         </Typography>
       )}
+      {dayjs(product.publishDate).isBefore(dayjs(), "day") &&
+        product.manuDate === null &&
+        product.expiDate === null && (
+          <Typography variant="h5" sx={{ color: "error.main", mb: 2, mt: 5 }}>
+            Sản phẩm đã đến ngày mở bán, vui lòng cập nhật lại ngày sản xuất và
+            hạn sử dụng của sản phẩm
+          </Typography>
+        )}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Chi tiết & cập nhật sản phẩm
         </Typography>
-
         <Button
           variant="contained"
           color="error"
@@ -372,42 +471,67 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 3 }}>
-            <StyledDatePicker
-              format="DD-MM-YYYY"
-              label="Ngày sản xuất"
-              name="manuDate"
-              fullWidth
-              margin="normal"
-              value={dayjs(formData.manuDate)}
-              onChange={(date) => handleDateChange("manuDate", date)}
-              error={!!errors.manuDate}
-            />
+            {!isUpcomingProduct && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày sản xuất"
+                name="manuDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.manuDate)}
+                onChange={(date) => handleDateChange("manuDate", date)}
+                error={!!errors.manuDate}
+              />
+            )}
+
             {errors.manuDate && (
               <HelperTextTypography>{errors.manuDate}</HelperTextTypography>
             )}
-            <StyledDatePicker
-              format="DD-MM-YYYY"
-              label="Ngày hết hạn"
-              name="expiDate"
-              fullWidth
-              margin="normal"
-              value={dayjs(formData.expiDate)}
-              onChange={(date) => handleDateChange("expiDate", date)}
-              error={!!errors.expiDate}
-            />
+            {!isUpcomingProduct && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày hết hạn"
+                name="expiDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.expiDate)}
+                onChange={(date) => handleDateChange("expiDate", date)}
+                error={!!errors.expiDate}
+              />
+            )}
+
             {errors.expiDate && (
               <HelperTextTypography>{errors.expiDate}</HelperTextTypography>
             )}
+            {isUpcomingProduct && !isUpcomingStateLocked && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày mở bán"
+                name="publishDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.publishDate)}
+                onChange={(date) => handleDateChange("publishDate", date)}
+                error={!!errors.publishDate}
+              />
+            )}
+            {errors.publishDate && (
+              <HelperTextTypography>{errors.publishDate}</HelperTextTypography>
+            )}
           </Box>
         </LocalizationProvider>
-        {/* <TextField
-          label="Ngày hết hạn"
-          name="expiDate"
-          fullWidth
-          margin="normal"
-          value={formData.expiDate}
-          onChange={handleChange}
-        /> */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isUpcomingProduct"
+              checked={isUpcomingProduct && !isUpcomingStateLocked}
+              onChange={handleCheckboxChange}
+              disabled={isUpcomingStateLocked}
+            />
+          }
+          label="Là sản phẩm sắp mở bán"
+        />
+        {console.log(!isUpcomingProduct + ", " + !isUpcomingStateLocked)}
         <FormControl fullWidth margin="normal">
           <InputLabel>Danh mục sản phẩm</InputLabel>
           <Select
@@ -458,26 +582,25 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
           </Button>
         </Box>
       </form>
-
       <Dialog open={confirmOpen} onClose={() => handleConfirmClose(false)}>
         <DialogTitle>
           {confirmType === "save"
             ? "Xác nhận lưu"
             : confirmType === "delete"
-              ? "Xác nhận xóa"
-              : confirmType === "cancel"
-                ? "Xác nhận hủy"
-                : ""}
+            ? "Xác nhận xóa"
+            : confirmType === "cancel"
+            ? "Xác nhận hủy"
+            : ""}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {confirmType === "save"
               ? "Bạn có chắc chắn muốn lưu các thay đổi?"
               : confirmType === "delete"
-                ? "Bạn có chắc chắn muốn xóa sản phẩm này?"
-                : confirmType === "cancel"
-                  ? "Thay đổi sẽ không được lưu, bạn có chắc chắn hủy?"
-                  : ""}
+              ? "Bạn có chắc chắn muốn xóa sản phẩm này?"
+              : confirmType === "cancel"
+              ? "Thay đổi sẽ không được lưu, bạn có chắc chắn hủy?"
+              : ""}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -493,7 +616,37 @@ function ProductDetails({ product, categories, onClose, onDeleteSuccess }) {
           </Button>
         </DialogActions>
       </Dialog>
-      <ToastContainer />
+      {/* <Dialog
+        open={confirmManuExpiChangeOpen}
+        onClose={() => setConfirmManuExpiChangeOpen(false)}
+        aria-labelledby="confirm-manu-expi-change-dialog-title"
+        aria-describedby="confirm-manu-expi-change-dialog-description"
+      >
+        <DialogTitle id="confirm-manu-expi-change-dialog-title">
+          Xác nhận chuyển trạng thái
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-manu-expi-change-dialog-description">
+            Sau khi đã chuyển sản phẩm thành sản phẩm đã mở bán, bạn không thể
+            chuyển lại về trạng thái sắp mở bán. Xác nhận tiếp tục?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setConfirmManuExpiChangeOpen(false)}
+            color="primary"
+          >
+            Hủy
+          </Button>
+          <Button
+            onClick={handleConfirmManuExpiChange}
+            color="primary"
+            autoFocus
+          >
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog> */}
     </Container>
   );
 }

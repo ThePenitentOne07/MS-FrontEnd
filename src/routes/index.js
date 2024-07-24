@@ -52,6 +52,7 @@ import CategoryManagement from "../staffPages/CategoryManagement";
 import RefundStatus from "../pages/RefundStatus";
 import OrderHistory from "../staffPages/OrderHistory";
 import AboutUs from "../pages/AboutUs";
+import PreorderCheckout from "../pages/PreorderCheckout";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -80,6 +81,7 @@ function Router() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/post" element={<PostPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/preorder-checkout" element={<PreorderCheckout />} />
             <Route path="/orderstatus/:orderId" element={<OrderStatus />} />
             <Route path="toship" element={<OrderList />} />
             <Route path="transStatus" element={<TrasactionStatus />} />
@@ -93,9 +95,6 @@ function Router() {
             <Route path="/refundStatus/:refundId" element={<RefundStatus />} />
             <Route path="/address" element={<AddressManagement />} />
             <Route path="/about" element={<AboutUs />} />
-
-
-
           </Route>
           <Route element={<BlankLayout />}>
             <Route path="/login" element={<Login />} />

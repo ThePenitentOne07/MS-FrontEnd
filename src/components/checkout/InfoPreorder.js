@@ -8,9 +8,8 @@ import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
 import apiService from "../../app/apiService";
 import { CircularProgress } from "@mui/material";
-import { formatCurrency } from "../../app/util";
 
-function Info({ totalPrice, setTotalPrice, setCartId }) {
+function InfoPreorder({ totalPrice, setTotalPrice, setCartId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -30,7 +29,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
     const fetchCartItems = async () => {
       setLoading(true);
       try {
-        const response = await apiService.get(`/api/carts/${userId}`, {
+        const response = await apiService.get(`/api/carts/temp`, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -79,7 +78,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
         Total
       </Typography>
       <Typography variant="h4" gutterBottom>
-        {formatCurrency(totalPrice)}VND
+        ${totalPrice}
       </Typography>
       <List disablePadding>
         {cartItems.map((item) => (
@@ -98,7 +97,7 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
               }
             />
             <Typography variant="body1" fontWeight="medium">
-              {formatCurrency(item.price)}VND
+              {item.price}
             </Typography>
           </ListItem>
         ))}
@@ -107,10 +106,10 @@ function Info({ totalPrice, setTotalPrice, setCartId }) {
   );
 }
 
-Info.propTypes = {
+InfoPreorder.propTypes = {
   totalPrice: PropTypes.string.isRequired,
   setTotalPrice: PropTypes.func.isRequired,
   setCartId: PropTypes.func.isRequired,
 };
 
-export default Info;
+export default InfoPreorder;

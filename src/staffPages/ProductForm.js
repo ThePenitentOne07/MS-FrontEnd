@@ -11,6 +11,8 @@ import {
   InputLabel,
   Alert,
   styled,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import apiService from "../app/apiService";
 import { LoadingButton } from "@mui/lab";
@@ -28,8 +30,9 @@ const HelperTextTypography = styled(Typography)(({ theme }) => ({
 
 const StyledDatePicker = styled(DatePicker)(({ theme, error }) => ({
   "& .MuiInputBase-root": {
-    borderBottom: `1px solid ${error ? theme.palette.error.main : theme.palette.grey[500]
-      }`, // Set border color based on error state
+    borderBottom: `1px solid ${
+      error ? theme.palette.error.main : theme.palette.grey[500]
+    }`, // Set border color based on error state
     borderRadius: theme.shape.borderRadius,
     paddingBottom: theme.spacing(0.12), // Add some padding for label
     "& fieldset": {
@@ -45,7 +48,8 @@ const StyledDatePicker = styled(DatePicker)(({ theme, error }) => ({
 
 function ProductForm({ categories, onClose }) {
   const initialCategoryID = categories.length > 0 ? categories[0].id : "";
-  const [errorDisplay, setErrorDisplay] = useState("")
+  const [errorDisplay, setErrorDisplay] = useState("");
+  const [isUpcomingProduct, setIsUpcomingProduct] = useState(false);
 
   const [formData, setFormData] = useState({
     productName: "",
@@ -56,6 +60,7 @@ function ProductForm({ categories, onClose }) {
     expiDate: "",
     categoryID: initialCategoryID,
     productImage: null,
+    publishDate: "",
   });
   const [isDirty, setIsDirty] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -66,6 +71,7 @@ function ProductForm({ categories, onClose }) {
     productDescription: "",
     manuDate: "",
     expiDate: "",
+    publishDate: "",
   });
 
   useEffect(() => {
@@ -111,6 +117,7 @@ function ProductForm({ categories, onClose }) {
       ...prevErrors,
       [fieldName]: errorMessage,
     }));
+    return errorMessage !== "";
   };
 
   const validateDate = (fieldName, value) => {
@@ -129,13 +136,15 @@ function ProductForm({ categories, onClose }) {
       case "expiDate":
         const expiDate = dayjs(value);
         errorMessage =
-          !expiDate.isValid() ||
-            expiDate.isBefore(currentDate, "day") ||
-            (formData.manuDate &&
-              dayjs(formData.manuDate).isValid() &&
-              expiDate.isBefore(dayjs(formData.manuDate), "day"))
+          !expiDate.isValid() || expiDate.isBefore(currentDate, "day")
             ? "Ngày hết hạn không hợp lệ."
             : "";
+        break;
+      case "publishDate":
+        const publishDate = dayjs(value);
+        errorMessage = !publishDate.isValid()
+          ? "Ngày mở bán không hợp lệ."
+          : "";
         break;
       default:
         break;
@@ -145,6 +154,7 @@ function ProductForm({ categories, onClose }) {
       ...prevErrors,
       [fieldName]: errorMessage,
     }));
+    return errorMessage !== "";
   };
 
   const handleChange = (e) => {
@@ -170,6 +180,21 @@ function ProductForm({ categories, onClose }) {
     validateDate(name, date.format("YYYY-MM-DD"));
   };
 
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setIsUpcomingProduct(checked);
+    if (!checked) {
+      setFormData((prevData) => ({
+        ...prevData,
+        publishDate: "",
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        publishDate: "",
+      }));
+    }
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -184,13 +209,29 @@ function ProductForm({ categories, onClose }) {
   };
 
   const handleSubmit = async () => {
-    let isError = false;
-    for (const key in errors) {
-      if (errors[key] !== "") isError = true;
+    let isFieldError = false;
+    let isDateError = false;
+    for (const item in formData) {
+      if (validateField(item, formData[item])) isFieldError = true;
     }
-    if (isError || formData.productImage == null) {
+    if (isUpcomingProduct) {
+      if (validateDate("publishDate", formData.publishDate)) isDateError = true;
+    } else {
+      if (
+        validateDate("manuDate", formData.manuDate) ||
+        validateDate("expiDate", formData.expiDate)
+      )
+        isDateError = true;
+    }
+    if (isFieldError) {
       window.alert(
         "Vui lòng kiểm tra lại các trường nhập và nhập đúng thông tin"
+      );
+      return;
+    }
+    if (isDateError) {
+      window.alert(
+        "Vui lòng không bỏ trống ngày sản xuất hoặc ngày hết hạn và nhập đúng định dạng"
       );
       return;
     }
@@ -198,6 +239,9 @@ function ProductForm({ categories, onClose }) {
       const formDataToSend = new FormData();
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
+      }
+      for (const key in formData) {
+        console.log(key + ": " + formData[key]);
       }
       await apiService.post("/api/products", formDataToSend, {
         headers: {
@@ -275,34 +319,65 @@ function ProductForm({ categories, onClose }) {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 3 }}>
-            <StyledDatePicker
-              format="DD-MM-YYYY"
-              label="Ngày sản xuất"
-              name="manuDate"
-              fullWidth
-              margin="normal"
-              value={dayjs(formData.manuDate)}
-              onChange={(date) => handleDateChange("manuDate", date)}
-              error={!!errors.manuDate}
-            />
+            {!isUpcomingProduct && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày sản xuất"
+                name="manuDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.manuDate)}
+                onChange={(date) => handleDateChange("manuDate", date)}
+                error={!!errors.manuDate}
+              />
+            )}
+
             {errors.manuDate && (
               <HelperTextTypography>{errors.manuDate}</HelperTextTypography>
             )}
-            <StyledDatePicker
-              format="DD-MM-YYYY"
-              label="Ngày hết hạn"
-              name="expiDate"
-              fullWidth
-              margin="normal"
-              value={dayjs(formData.expiDate)}
-              onChange={(date) => handleDateChange("expiDate", date)}
-              error={!!errors.expiDate}
-            />
+            {!isUpcomingProduct && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày hết hạn"
+                name="expiDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.expiDate)}
+                onChange={(date) => handleDateChange("expiDate", date)}
+                error={!!errors.expiDate}
+              />
+            )}
+
             {errors.expiDate && (
               <HelperTextTypography>{errors.expiDate}</HelperTextTypography>
             )}
+            {isUpcomingProduct && (
+              <StyledDatePicker
+                format="DD-MM-YYYY"
+                label="Ngày mở bán"
+                name="publishDate"
+                fullWidth
+                margin="normal"
+                value={dayjs(formData.publishDate)}
+                onChange={(date) => handleDateChange("publishDate", date)}
+                error={!!errors.publishDate}
+              />
+            )}
+            {errors.publishDate && (
+              <HelperTextTypography>{errors.publishDate}</HelperTextTypography>
+            )}
           </Box>
         </LocalizationProvider>
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isUpcomingProduct"
+              checked={isUpcomingProduct}
+              onChange={handleCheckboxChange}
+            />
+          }
+          label="Là sản phẩm sắp mở bán"
+        />
         <FormControl fullWidth margin="normal">
           <InputLabel>Danh mục sản phẩm</InputLabel>
           <Select
@@ -330,7 +405,12 @@ function ProductForm({ categories, onClose }) {
           )}
           <Button variant="contained" component="label">
             Tải lên hình ảnh (*)
-            <input type="file" hidden accept="image/*" onChange={handleImageChange} />
+            <input
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           </Button>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
