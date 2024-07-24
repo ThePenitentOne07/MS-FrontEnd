@@ -235,7 +235,6 @@ const OrderListStaff = () => {
   useEffect(() => {
     getOrders();
   }, []);
-
   const handleFilterChange = (event) => {
     setFilterStatus(event.target.value);
   };
@@ -428,21 +427,21 @@ const OrderListStaff = () => {
             )}
             {selectedOrderStatus.orderStatus ===
               "PREORDERED_ORDER_IN_DELIVERY" && (
-              <>
-                <input
-                  onChange={handleFileChange}
-                  type="file"
-                  id="file"
-                  accept="image/*"
-                />
-                <Button onClick={handleComplete} color="primary">
-                  Order Complete
-                </Button>
-                <Button onClick={handleDelay} color="secondary">
-                  Delay
-                </Button>
-              </>
-            )}
+                <>
+                  <input
+                    onChange={handleFileChange}
+                    type="file"
+                    id="file"
+                    accept="image/*"
+                  />
+                  <Button onClick={handleComplete} color="primary">
+                    Order Complete
+                  </Button>
+                  <Button onClick={handleDelay} color="secondary">
+                    Delay
+                  </Button>
+                </>
+              )}
             {selectedOrderStatus.orderStatus === "CANNOT_DELIVER" && (
               <>
                 <Button onClick={handleAcceptDelay} color="primary">

@@ -172,7 +172,7 @@ function HomePage() {
                       <Grid item xs={8}>
                         <ProductList
                           result={result.filter((product) => {
-                            return product.publishDate !== null &&
+                            return product.publishDate !== null && product.manuDate === null && product.expiDate === null &&
                               dayjs(product.publishDate).isAfter(dayjs())
                               ? product
                               : null;

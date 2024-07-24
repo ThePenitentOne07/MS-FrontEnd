@@ -100,11 +100,7 @@ function Login() {
                         sx={{ mb: 3 }}
                         color="secondary"
                     />
-                    <Typography sx={{ textAlign: 'right', mb: 2 }}>
-                        <Link href="/reset" underline="hover" color="secondary">
-                            Quên mật khẩu?
-                        </Link>
-                    </Typography>
+
                     <LoadingButton
                         fullWidth
                         size="large"
@@ -124,17 +120,7 @@ function Login() {
                         </Link>
                     </Typography>
                 </FormProvider>
-                <LoadingButton
-                    fullWidth
-                    size="large"
-                    onClick={handleLoginGoogle}
-                    variant="contained"
 
-                    loading={isSubmitting}
-                    sx={{ py: 1.5, mb: 2, mb: 1, backgroundColor: '#4285F4', '&:hover': { backgroundColor: '#357ae8' } }}
-                >
-                    Đăng nhập bằng Google
-                </LoadingButton>
             </Box>
         </Container>
     );

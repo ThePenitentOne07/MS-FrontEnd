@@ -29,6 +29,7 @@ import apiService from "../app/apiService";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import InfoPreorder from "../components/checkout/InfoPreorder";
+import { formatCurrency } from "../app/util";
 
 const steps = ["Thông tin người dùng", "Thông tin đơn hàng"];
 
@@ -299,7 +300,7 @@ export default function PreorderCheckout() {
                 <Typography variant="subtitle2" gutterBottom>
                   Selected products
                 </Typography>
-                <Typography variant="body1">${totalPrice}</Typography>
+                <Typography variant="body1">{formatCurrency(totalPrice)} VND</Typography>
               </div>
               <InfoMobile totalPrice={totalPrice} />
             </CardContent>

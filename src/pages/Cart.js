@@ -43,18 +43,10 @@ const CartPage = () => {
           },
         });
         console.log(response.data.result.items[0]);
+        setCartItems(response.data.result.items);
+        setCartId(response.data.result.cartId);
 
-        if (
-          response.data.result.items.length > 0 &&
-          response.data.result.items
-        ) {
-          setCartItems(response.data.result.items);
-          setCartId(response.data.result.cartId);
-
-          setError("");
-        } else {
-          setError("No items in cart");
-        }
+        setError("");
         console.log("Cartid is ", cartId);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
@@ -170,9 +162,9 @@ const CartPage = () => {
         prevItems.map((item) =>
           item.productId === productId
             ? {
-                ...item,
-                quantity: newQuantity === "" ? "" : parseInt(newQuantity),
-              }
+              ...item,
+              quantity: newQuantity === "" ? "" : parseInt(newQuantity),
+            }
             : item
         )
       );
@@ -252,7 +244,7 @@ const CartPage = () => {
         Giỏ hàng
       </Typography>
       {cartItems.length === 0 || !cartItems ? (
-        <Typography variant="h6">Your cart is empty</Typography>
+        <Typography variant="h6">Giỏ hàng của bạn trống</Typography>
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>

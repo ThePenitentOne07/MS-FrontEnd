@@ -291,7 +291,7 @@ const RefundRequest = () => {
             </StyledTableContainer>
             {selectedOrder && (
                 <Dialog open={true} onClose={handleClose} maxWidth="md" fullWidth >
-                    <DialogTitle>Order Details</DialogTitle>
+                    <DialogTitle>Refund Details</DialogTitle>
                     <DialogContent>
                         <Typography>Request ID: {selectedOrder.id}</Typography>
                         <Typography>Customer Name: {selectedOrder.senderName}</Typography>
