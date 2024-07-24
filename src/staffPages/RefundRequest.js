@@ -20,12 +20,12 @@ const statusMapping = {
     TAKING_PRODUCT_PROGRESSING: 'On way to get product',
     CANNOT_DELIVER: 'Can not deliver',
     CANNOT_CONFIRM_REQUEST: 'Can not confirm',
-    COMPLETE_EXCHANGE: 'Complete',
     CONFIRM_TAKING: "Product retrieved",
     SHOP_PROCESS: "Processing",
     CONFIRM_REFUND_MONEY: "Refund accepted",
     DELIVERY_TO_TURN_BACK: "On way to return product",
-    COMPLETE_TURN_BACK: "Product returned"
+    COMPLETE_TURN_BACK: "Product returned",
+    CANNOT_ACCEPT_REFUND_REQUEST: "Rejected"
 };
 
 const statusColorMapping = {
@@ -37,8 +37,8 @@ const statusColorMapping = {
     SHOP_PROCESS: '#FFB233',
     CONFIRM_REFUND_MONEY: '#32CD32',
     DELIVERY_TO_TURN_BACK: '#1E90FF',
-    COMPLETE_TURN_BACK: '#32CD32'
-
+    COMPLETE_TURN_BACK: '#32CD32',
+    CANNOT_ACCEPT_REFUND_REQUEST: '#FF4500'
 };
 
 const RefundRequest = () => {
@@ -101,7 +101,7 @@ const RefundRequest = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            alert("Order canceled");
+            alert("Refund canceled");
             handleClose();
         } catch (error) {
             console.error("Error denying order:", error);
@@ -216,7 +216,8 @@ const RefundRequest = () => {
         }
     }
 
-    const filteredOrders = filterStatus ? orders.filter(order => order.orderStatus === filterStatus) : orders;
+    const filteredOrders = filterStatus ? orders.filter(order => order.refundStatus === filterStatus) : orders;
+    // console.log(filterStatus)
 
     return (
         <Container>
@@ -237,10 +238,14 @@ const RefundRequest = () => {
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
                             <MenuItem value=""><em>All</em></MenuItem>
-                            <MenuItem value="PAID">Paid</MenuItem>
-                            <MenuItem value="IN_DELIVERY">In delivery</MenuItem>
-                            <MenuItem value="CANNOT_DELIVER">Delayed</MenuItem>
-                            <MenuItem value="COMPLETE_EXCHANGE">Complete</MenuItem>
+                            <MenuItem value="IN_PROGRESSING">In progress</MenuItem>
+                            <MenuItem value="TAKING_PRODUCT_PROGRESSING">On way to get product</MenuItem>
+                            <MenuItem value="CANNOT_DELIVER">Can not deliver</MenuItem>
+                            <MenuItem value="CONFIRM_TAKING">Product retrieved</MenuItem>
+                            <MenuItem value="SHOP_PROCESS">Processing</MenuItem>
+                            <MenuItem value="CONFIRM_REFUND_MONEY">Refund accepted</MenuItem>
+                            <MenuItem value="DELIVERY_TO_TURN_BACK">On way to return product</MenuItem>
+                            <MenuItem value="COMPLETE_TURN_BACK">Product returned</MenuItem>
                         </Select>
                     </FormControl>
                 </Stack>
@@ -294,24 +299,47 @@ const RefundRequest = () => {
                         <Typography>Address: {selectedOrder.senderAddress}</Typography>
                         <Typography>Reason: {selectedOrder.customerRefundReason}</Typography>
                         <Typography>Note: {selectedOrder.customerNote}</Typography>
+                        {selectedOrder.refundStatus === 'CANNOT_CONFIRM_REQUEST' && (
+                            <>
+                                <Typography sx={{ color: 'red' }}>
+                                    Lý do từ chối: <b>{selectedOrder.staffRejectReason}</b>
+                                </Typography>
 
-                        {selectedOrder.refundStatus !== 'CONFIRM_TAKING' && (
-                            <CardMedia
-                                component="img"
-                                height="500"
-
-                                image={selectedOrder.customerImage}
-                                alt="Order Image"
-                            />
+                            </>
                         )}
+                        {selectedOrder.refundStatus !== 'CANNOT_ACCEPT_REFUND_REQUEST' &&
+                            selectedOrder.refundStatus !== 'CONFIRM_TAKING' && (
+                                <CardMedia
+                                    component="img"
+                                    height="500"
+                                    image={selectedOrder.customerImage}
+                                    alt="Order Image"
+                                />
+                            )}
                         {selectedOrder.refundStatus === 'CONFIRM_TAKING' && (
                             <>
+
                                 <Typography>Product image:</Typography>
                                 <CardMedia
                                     component="img"
                                     height="500"
 
                                     image={selectedOrder.staffReceivedImage}
+                                    alt="Order Image"
+                                />
+                            </>
+                        )}
+                        {selectedOrder.refundStatus === 'CANNOT_ACCEPT_REFUND_REQUEST' && (
+                            <>
+                                <Typography sx={{ color: 'red' }}>
+                                    Lý do từ chối: <b>{selectedOrder.staffRejectReason}</b>
+                                </Typography>
+                                <Typography>Rejected image:</Typography>
+                                <CardMedia
+                                    component="img"
+                                    height="500"
+
+                                    image={selectedOrder.staffRejectImage}
                                     alt="Order Image"
                                 />
                             </>
@@ -353,7 +381,7 @@ const RefundRequest = () => {
                         {selectedOrder.refundStatus === 'CANNOT_CONFIRM_REQUEST' && (
                             <>
 
-                                <Button onClick={handleAcceptInProgress} color="primary">Accept</Button>
+
                                 {/* <Button onClick={handleCancel1} color="secondary">Cancel</Button> */}
 
                             </>

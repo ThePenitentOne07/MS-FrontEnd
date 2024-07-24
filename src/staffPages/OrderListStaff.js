@@ -74,6 +74,7 @@ const OrderListStaff = () => {
     setIsDelayFormOpen(false);
     setDenyReason('');
     getOrders();
+    setFile('');
   };
 
   const handleAcceptDelay = async () => {

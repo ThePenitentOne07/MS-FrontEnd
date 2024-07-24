@@ -82,7 +82,7 @@ function CategorySidebar() {
                         {categories.map((category) => (
                             <div key={category.id}>
                                 <CategoryItem button onClick={() => handleClick(category)}>
-                                    {/* <CategoryIcon>{category.icon}</CategoryIcon> */}
+                                    <OpacityIcon />
                                     <ListItemText primary={category.categoryName} />
                                     {/* {category.subcategories.length > 0 && (open[category.name] ? <ExpandLess /> : <ExpandMore />)} */}
                                 </CategoryItem>
