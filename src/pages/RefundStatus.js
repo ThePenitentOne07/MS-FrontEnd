@@ -32,10 +32,11 @@ const RefundStatus = () => {
     const [description, setDescription] = useState('');
     const navigate = useNavigate();
 
-    const steps = ["Đang xác nhận", "Nhân viên đi lấy hàng", "Shop đang xử lý", "Hoàn trả thành công"];
+    const steps = ["Đang xác nhận", "Nhân viên đi lấy hàng", "Cửa hàng đang xử lý", "Hoàn trả tiền thành công"];
 
     const statusToStepIndexMap = {
         "IN_PROGRESSING": 0,
+        "CANCEL_REFUND_REQUEST": 0,
         "TAKING_PRODUCT_PROGRESSING": 1,
         "CANNOT_CONFRIRM": 1,
         "CONFIRM_TAKING": 1,
@@ -45,18 +46,18 @@ const RefundStatus = () => {
         "CANNOT_ACCEPT_REFUND_REQUEST": 3,
         "DELIVERY_TO_TURN_BACK": 3,
         "COMPLETE_TURN_BACK": 3,
-        "CONFIRM_RFUND_MONEY": 3,
+        "CONFIRM_REFUND_MONEY": 3,
         "CANNOT_CONFIRM_REQUEST": 0
     };
     const customStepLabels = {
 
-        "CONFIRM_TAKING": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Shop đang xử lý", "Hoàn trả thành công"],
-        "SHOP_PROCESS": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Shop đang xử lý", "Hoàn trả thành công"],
-        "CANNOT_ACCEPT_REFUND_REQUEST": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Shop đang xử lý", "Yêu câu bị từ chối"],
-        "DELIVERY_TO_TURN_BACK": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Shop đang xử lý", "Đang trả hàng"],
-        "COMPLETE_TURN_BACK": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Shop đang xử lý", "Đã trả hàng thành công"],
-        "CANNOT_CONFIRM_REQUEST": ["Yêu cầu bị từ chối", "Nhân viên đi lấy hàng", "Shop đang xử lý", "Hoàn trả thành công"]
-
+        "CONFIRM_TAKING": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Cửa hàng đang xử lý", "Hoàn trả thành công"],
+        "SHOP_PROCESS": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Cửa hàng đang xử lý", "Hoàn trả thành công"],
+        "CANNOT_ACCEPT_REFUND_REQUEST": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Cửa hàng đang xử lý", "Yêu câu bị từ chối"],
+        "DELIVERY_TO_TURN_BACK": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Cửa hàng đang xử lý", "Đang trả hàng"],
+        "COMPLETE_TURN_BACK": ["Đang xác nhận", "Nhân viên đã lấy hàng", "Cửa hàng đang xử lý", "Đã trả hàng thành công"],
+        "CANNOT_CONFIRM_REQUEST": ["Yêu cầu bị từ chối", "Nhân viên đi lấy hàng", "Cửa hàng đang xử lý", "Hoàn trả thành công"],
+        "CANCEL_REFUND_REQUEST": ["Yêu cầu đã hủy", "Nhân viên đi lấy hàng", "Cửa hàng đang xử lý", "Hoàn trả thành công"]
     };
 
     useEffect(() => {
@@ -88,10 +89,13 @@ const RefundStatus = () => {
         "CONFIRM_TAKING": "Nhân viên đã lấy hàng",
         "COMPLETE_EXCHANGE": "Giao hàng thành công",
         "CANNOT_CONFIRM_REQUEST": "Yêu cầu không được chấp nhận",
-        "SHOP_PROCESS": "Shop đang xử lý    ",
+        "SHOP_PROCESS": "Cửa hàng đang xử lý",
         "CANNOT_ACCEPT_REFUND_REQUEST": "Yêu cầu bị từ chối",
         "DELIVERY_TO_TURN_BACK": "Đang trả hàng",
-        "COMPLETE_TURN_BACK": "Đã trả hàng thành công"
+        "COMPLETE_TURN_BACK": "Đã trả hàng thành công",
+        "CONFIRM_REFUND_MONEY": "Hoàn trả tiền thành công",
+        "CANCEL_REFUND_REQUEST": "Đơn đã hủy",
+        "TAKING_PRODUCT_PROGRESSING": "Nhân viên đang đi lấy hàng"
     };
 
     // if (!order) {
@@ -119,6 +123,17 @@ const RefundStatus = () => {
     };
     const handleRefundSubmit = () => {
         navigate(`/refundList/$}`)
+    }
+    const handleCancel = async () => {
+        try {
+            await apiService.patch(`/api/refund/${refundId}/cancel`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+        } catch {
+
+        }
     }
 
     // const handleSubmitRating = async () => {
@@ -200,6 +215,13 @@ const RefundStatus = () => {
                                     }}
                                 />
                             </Card>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleCancel}
+                                sx={{ mt: 3 }}
+                            >Hủy yêu cầu</Button>
+
                         </>
                     )}
                     {order.refundStatus === "TAKING_PRODUCT_PROGRESSING" && (
@@ -327,6 +349,29 @@ const RefundStatus = () => {
                                         maxHeight: 500, // Sets a maximum height to scale the image
                                         objectFit: 'contain' // Ensures the entire image is visible within the specified dimensions
                                     }}
+
+                                />
+                            </Card>
+                        </>
+                    )}
+                    {order.refundStatus === "CONFIRM_REFUND_MONEY" && (
+                        <>
+
+                            <Card>
+                                <CardMedia
+                                    component="img"
+                                    alt="Reject Reason Image"
+                                    height="500"
+
+                                    image={`${order.customerImage}`} // replace with your image path or URL
+                                    title="Reject Reason"
+                                    sx={{
+                                        width: '100%', // Ensures the image takes the full width of the card
+                                        height: 'auto', // Maintains aspect ratio by automatically adjusting the height
+                                        maxHeight: 500, // Sets a maximum height to scale the image
+                                        objectFit: 'contain' // Ensures the entire image is visible within the specified dimensions
+                                    }}
+
                                 />
                             </Card>
                         </>

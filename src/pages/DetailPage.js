@@ -105,7 +105,7 @@ function DetailPage() {
 
         // Check if the user object exists and get the id
         if (!savedUser || !savedUser.id) {
-            console.error('User ID not found in local storage');
+            navigate("/login")
             return;
         }
 
@@ -146,7 +146,7 @@ function DetailPage() {
 
         // Check if the user object exists and get the id
         if (!savedUser || !savedUser.id) {
-            console.error('User ID not found in local storage');
+            navigate("/login")
             return;
         }
 
@@ -212,6 +212,7 @@ function DetailPage() {
                 <Link underline="hover" color="inherit" component={RouterLink} to="/">
                     Home
                 </Link>
+
                 <Typography color="text.primary">{product?.productName}</Typography>
             </Breadcrumbs>
             <Box sx={{ position: "relative", height: 1 }}>

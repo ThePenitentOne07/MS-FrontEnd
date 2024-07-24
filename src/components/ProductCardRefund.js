@@ -51,7 +51,7 @@ export default function ProductCardRefund({ item, onChoose, handleDecreaseQuanti
             </Box>
             <CardActions>
                 <Button size="small" onClick={() => onChoose(item)}>
-                    Choose
+                    Chọn
                 </Button>
             </CardActions>
         </Card>

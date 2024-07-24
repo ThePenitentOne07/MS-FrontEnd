@@ -107,7 +107,7 @@ function CategorySidebar() {
                             <img src="https://suabottot.com/wp-content/uploads/elementor/thumbs/1-mua-sua-tang-qua-sua-bot-tot-ot73bz13tll6szo8mf1eljrgyrfod5b6yutnlhx0hq.png" className="d-block w-100" alt="Second slide" style={{ height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div className="carousel-item">
-                            <img src="https://via.placeholder.com/737x455.png" className="d-block w-100" alt="Third slide" style={{ height: '100%', objectFit: 'cover' }} />
+                            <img src="https://suabottot.com/wp-content/uploads/2024/05/sua-hikid-km-737x455.png" className="d-block w-100" alt="Third slide" style={{ height: '100%', objectFit: 'cover' }} />
                         </div>
                     </div>
                     <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

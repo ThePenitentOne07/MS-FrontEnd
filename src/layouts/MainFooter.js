@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Typography, Link } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 const MainFooter = () => {
+
     return (
         <Box
             component="footer"
@@ -18,7 +20,7 @@ const MainFooter = () => {
             </Typography>
             <Typography variant="body2" color="white" align="center" >
                 {'Giới thiệu về '}
-                <Link color="inherit" href="https://mui.com/">
+                <Link color="inherit" component={NavLink} to="/about">
                     Sữa mẹ và bé
                 </Link>
                 {'.'}

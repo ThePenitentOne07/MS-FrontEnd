@@ -50,6 +50,8 @@ import Article2 from "../pages/Article2";
 import Article3 from "../pages/Article3";
 import CategoryManagement from "../staffPages/CategoryManagement";
 import RefundStatus from "../pages/RefundStatus";
+import OrderHistory from "../staffPages/OrderHistory";
+import AboutUs from "../pages/AboutUs";
 // import FinishGoogleRegistration from "../pages/FinishGoogleRegistration";
 // import GoogleLoginStatus from "../pages/GoogleLoginStatus";
 
@@ -90,6 +92,8 @@ function Router() {
             <Route path="/refundList/:orderId" element={<ListRefundPage />} />
             <Route path="/refundStatus/:refundId" element={<RefundStatus />} />
             <Route path="/address" element={<AddressManagement />} />
+            <Route path="/about" element={<AboutUs />} />
+
 
 
           </Route>
@@ -151,7 +155,7 @@ function Router() {
             <Route path="newPost" element={<EditorComponent />} />
             <Route path="refundReq" element={<RefundRequest />} />
             <Route path="category" element={<CategoryManagement />} />
-
+            <Route path="history" element={<OrderHistory />} />
           </Route>
         </Routes>
       </FormContext2>

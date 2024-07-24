@@ -31,11 +31,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Category" />
     </ListItemButton>
-    <ListItemButton component={NavLink} to="/staff/voucher" activeClassName="active">
+    <ListItemButton component={NavLink} to="/staff/history" activeClassName="active">
       <ListItemIcon>
         <MonetizationOnIcon />
       </ListItemIcon>
-      <ListItemText primary="Voucher" />
+      <ListItemText primary="Order History" />
     </ListItemButton>
     <ListItemButton component={NavLink} to="/staff/order" activeClassName="active">
       <ListItemIcon>
@@ -43,12 +43,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Order" />
     </ListItemButton>
-    <ListItemButton component={NavLink} to="/staff/customer" activeClassName="active">
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customer" />
-    </ListItemButton>
+
     <ListItemButton component={NavLink} to="/staff/refundReq" activeClassName="active">
       <ListItemIcon>
         <SendIcon />

@@ -114,12 +114,12 @@ function applyFilter(result, filters) {
     if (filters.priceRange) {
         filteredProducts = result.filter((product) => {
             if (filters.priceRange === "below") {
-                return product.price < 25;
+                return product.price < 350000;
             }
             if (filters.priceRange === "between") {
-                return product.price >= 25 && product.price <= 75;
+                return product.price >= 350000 && product.price <= 500000;
             }
-            return product.price > 75;
+            return product.price > 500000;
         });
     }
     return filteredProducts;

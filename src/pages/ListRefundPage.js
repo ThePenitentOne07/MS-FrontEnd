@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box } from '@mui/material';
+import { Container, Grid, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductCardRefund from '../components/ProductCardRefund';
 import apiService from '../app/apiService';
@@ -125,6 +125,7 @@ export default function ListRefundPage() {
             >
                 <DialogTitle>Chi tiết sản phẩm</DialogTitle>
                 <DialogContent>
+                    <Alert severity="error" sx={{ mb: 2 }}>Mọi thông tin khách cung cấp  phải chính xác, nếu không cửa hàng sẽ không chịu trách nhiệm</Alert>
                     <TextField
                         label="Tên sản phẩm"
                         name='productName'

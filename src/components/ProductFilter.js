@@ -19,9 +19,9 @@ export const FILTER_CATEGORY_OPTIONS = [
 ];
 
 export const FILTER_PRICE_OPTIONS = [
-  { value: "below", label: "Dưới 25" },
-  { value: "between", label: "Từ 25 -75" },
-  { value: "above", label: "Trên 75" },
+  { value: "below", label: "Dưới 350K" },
+  { value: "between", label: "Từ 350 -500K" },
+  { value: "above", label: "Trên 500K" },
 ];
 
 function ProductFilter({ resetFilter }) {
