@@ -10,6 +10,7 @@ import ProductFilter from '../components/ProductFilter';
 import BlogCard from '../components/BlogCard';
 import { useParams } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import dayjs from 'dayjs';
 
 function SearchPage() {
     const [result, setProducts] = useState([]);
@@ -40,7 +41,8 @@ function SearchPage() {
                         }
                     });
                     // Ensure res.data.result is an array
-                    setProducts(res.data.result.filter(product => product.visibilityStatus !== false) || []);
+                    setProducts(res.data.result.filter(product => product.visibilityStatus !== false));
+
                     setError("");
                 } catch (error) {
                     console.log(error);
@@ -124,4 +126,6 @@ function applyFilter(result, filters) {
     }
     return filteredProducts;
 }
+
+
 export default SearchPage;

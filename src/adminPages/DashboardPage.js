@@ -158,13 +158,13 @@ export default function Dashboard() {
       <Grid item xs={4}>
         <Paper sx={{ padding: 3, textAlign: "center" }}>
           <Typography variant="h6">Total Revenue</Typography>
-          <Typography variant="h4">{totalRevenue.toFixed(2)}</Typography>
+          <Typography variant="h4">{totalRevenue}</Typography>
         </Paper>
       </Grid>
       <Grid item xs={4}>
         <Paper sx={{ padding: 3, textAlign: "center" }}>
           <Typography variant="h6">Average Revenue per Order</Typography>
-          <Typography variant="h4">{averageRevenue.toFixed(2)}</Typography>
+          <Typography variant="h4">{averageRevenue}</Typography>
         </Paper>
       </Grid>
 

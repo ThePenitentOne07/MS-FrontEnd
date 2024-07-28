@@ -461,7 +461,7 @@ function DetailPage() {
                             </IconButton>
                           </Stack>
                           <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-                            {product.publishDate == null ? (
+                            {(product.publishDate !== null && product.manuDate !== null && product.expiDate !== null) || (product.publishDate === null && product.manuDate !== null && product.expiDate !== null) ? (
                               <>
                                 <Button
                                   variant="contained"

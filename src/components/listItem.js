@@ -32,14 +32,9 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Customers" />
     </ListItemButton>
-    <ListItemButton component={NavLink} to="/admin/shopInfo" activeClassName="active">
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Shop Information" />
-    </ListItemButton>
-    
-      
+
+
+
   </React.Fragment>
 );
 
